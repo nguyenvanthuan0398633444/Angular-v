@@ -1,0 +1,76 @@
+@import "../../../../../styles/themes.scss";
+
+.company__edit__wrapper {
+  width: 100%;
+  height: 100%;
+  background: #f9f9f9;
+  padding: 80px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ::ng-deep ait-input-number .input__contrainer {
+    margin-top: 8px !important;
+  }
+  .content_card {
+    width: 65%;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 36px;
+    text-align: center;
+    color: nb-theme(color-basic-100);
+  }
+  .form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-right: 90px;
+    // align-items: center;
+    .input__group__inline {
+      // margin-top: 16px;
+      width: 400px;
+      textarea {
+        width: 400px;
+      }
+      &.date {
+        width: auto;
+        // flex: 1;
+      }
+      .radio__input {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 400px;
+      }
+      .info {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+      }
+      /* margin-right:100px; */
+      .inpput {
+        color: #8f9bb3;
+        font-size: 15px;
+        width: 100%;
+      }
+      .label {
+        margin: 0;
+        font-weight: bold;
+        font-size: 12px;
+        text-transform: uppercase;
+
+        /* Text Color / Hint */
+
+        color: #8f9bb3;
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
+::ng-deep .ait-label span {
+  color: #8f9bb3 !important;
+}
+
+

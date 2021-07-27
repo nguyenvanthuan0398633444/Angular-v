@@ -1,0 +1,23 @@
+<div class="history__web_container">
+  <p class="form__title">{{'実行履歴の確認' | translate}}</p>
+  <div class="btn__group">
+    <div>
+      <div class="btn has__border" (click)="naviagteWebDB()">
+        <p style="color: #fff">{{ 'API設定へ' | translate }}</p>
+      </div>
+    </div>
+    <div>
+      <div class="btn" [nbSpinner]="isLoading" nbSpinnerStatus="control" (click)="handleClickButtonRight()">
+        <div class="icon-front">
+        </div>
+        <p>{{ getContentButtonRight() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="data__web__db" *ngIf="!isLoadingTable">
+    <div class="table-flow">
+      <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+    </div>
+  </div>
+</div>

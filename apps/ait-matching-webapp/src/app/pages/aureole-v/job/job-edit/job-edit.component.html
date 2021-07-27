@@ -1,0 +1,785 @@
+
+<div
+  class="company__edit__wrapper"
+  [nbSpinner]="isLoading"
+  nbSpinnerStatus="primary"
+  style="position: relative"
+>
+  <ait-text-gradient
+    [content]="getTitleByMode()"
+    id="form_edit_job"
+  ></ait-text-gradient>
+
+  <!-- {{ stateJobInfo.prefecture | json }} -->
+  <ait-card-content
+    class="content_card"
+    style="display: flex; justify-content: center"
+    [label]="'求人要件'"
+    [disableHeader]="true"
+    [padding]="'0px'"
+  >
+    <div class="form">
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-autocomplete-master
+          [id]="'job_company'"
+          [label]="'企業名'"
+          [required]="true"
+          [collection]="'sys_company'"
+          [placeholder]="'検索する'"
+          [dataTooltip]="dataCompany"
+          [isSubmit]="isSubmit"
+          [maxItem]="1"
+          (watchValue)="
+            handleOnchange($event, 'job_company', 'master');
+            handleInput(
+              $event?.value ? $event?.value[0]?._key : undefined,
+              'job_company',
+              getFieldName('検索する')
+            )
+          "
+          [disabled]="mode_screen === 'SAVE'"
+          [defaultValue]="[companyName]"
+          [isReset]="resetMasterInput"
+        >
+       
+        </ait-autocomplete-master>
+        <!-- <ait-error-message
+        [errors]="errors.job_company"
+        [id]="'job_company'"
+      ></ait-error-message> -->
+      </div>
+      <!-- //business -->
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-autocomplete-master-data
+          [id]="'business'"
+          [label]="'職種・分野'"
+          [isSubmit]="isSubmit"
+          [required]="true"
+          [placeholder]="'選択する'"
+          [class]="'JOB_BUSINESS'"
+          [defaultValue]="stateJobInfo.business"
+          (onError)="handleError($event, 'business')"
+          [maxItem]="10"
+          [width]="'250px'"
+          (watchValue)="handleOnchange($event, 'business', 'master')"
+          [disableOutputDefault]="true"
+          [isReset]="resetMasterInput"
+        >
+        </ait-autocomplete-master-data>
+      </div>
+
+      <div
+        class="input__group__inline"
+        style="
+          margin-top: 10px;
+          display: flex;
+          width: 100%;
+          align-items: center;
+        "
+      >
+        <nb-checkbox
+          *ngIf="!isResetCheckbox"
+          (checkedChange)="checkChange($event, 'desired_occupation')"
+          [id]="'desired_occupation_checkbox'"
+          [checked]="checkRequireField('desired_occupation')"
+          #checkbox
+          style="margin-top: 10px"
+          ><span
+            style="color: #8f9bb3"
+            [id]="'desired_occupation_text_checkbox'"
+            >{{ getFieldName('希望者のみ') }}</span
+          ></nb-checkbox
+        >
+        <div class="input__group__inline" style="margin-left: 5px">
+          <ait-autocomplete-master-data
+            [hideLabel]="true"
+            [label]="'希望職種'"
+            [id]="'desired_occupation'"
+            [required]="checkRequireField('desired_occupation')"
+            [isSubmit]="isSubmit"
+            [placeholder]="'選択する'"
+            [width]="'250px'"
+            [class]="'JOB_OCCUPATION'"
+            [defaultValue]="[stateJobInfo.desired_occupation]"
+            (onError)="handleError($event, 'desired_occupation')"
+            (watchValue)="
+              handleOnchange($event, 'desired_occupation', 'master')
+            "
+            [disableOutputDefault]="true"
+            [isReset]="resetMasterInput"
+            [maxItem]="1"
+          >
+          </ait-autocomplete-master-data>
+        </div>
+      </div>
+
+      <div
+        class="input__group__inline"
+        style="
+          margin-top: 10px;
+          display: flex;
+          width: 100%;
+          align-items: center;
+        "
+      >
+        <nb-checkbox
+          [id]="'experienced_occupation_checkbox'"
+          (checkedChange)="checkChange($event, 'experienced_occupation')"
+          [checked]="checkRequireField('experienced_occupation')"
+          #checkbox2
+          *ngIf="!isResetCheckbox"
+          style="margin-top: 10px"
+          ><span
+            style="color: #8f9bb3"
+            [id]="'experienced_occupation_text_checkbox'"
+            >{{ getFieldName('経験者のみ') }}</span
+          ></nb-checkbox
+        >
+
+        <div class="input__group__inline" style="margin-left: 5px">
+          <ait-autocomplete-master-data
+            [hideLabel]="true"
+            [label]="'経験職種'"
+            [id]="'experienced_occupation'"
+            [required]="checkRequireField('experienced_occupation')"
+            [isSubmit]="isSubmit"
+            [placeholder]="'選択する'"
+            [class]="'JOB_OCCUPATION'"
+            [width]="'250px'"
+            (onError)="handleError($event, 'experienced_occupation')"
+            [defaultValue]="[stateJobInfo.experienced_occupation]"
+            (watchValue)="
+              handleOnchange($event, 'experienced_occupation', 'master')
+            "
+            [disableOutputDefault]="true"
+            [isReset]="resetMasterInput"
+            [maxItem]="1"
+          >
+          </ait-autocomplete-master-data>
+        </div>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-autocomplete-master-data
+          [id]="'residence_status'"
+          [required]="true"
+          [isSubmit]="isSubmit"
+          [label]="'就労資格'"
+          [placeholder]="'選択する'"
+          [class]="'JOB_RESIDENCE_STATUS'"
+          [maxItem]="10"
+          [width]="'250px'"
+          [defaultValue]="stateJobInfo.residence_status"
+          (onError)="handleError($event, 'residence_status')"
+          (watchValue)="handleOnchange($event, 'residence_status', 'master')"
+          [disableOutputDefault]="true"
+          [isReset]="resetMasterInput"
+        >
+        </ait-autocomplete-master-data>
+      </div>
+
+      <!-- //description -->
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-text
+          [height]="'120px'"
+          [rows]="4"
+          [placeholder]="getFieldName('「業務内容」入力')"
+          [label]="'業務内容'"
+          [width]="'400px'"
+          [required]="true"
+          [id]="'description'"
+          [defaultValue]="
+            stateJobInfo.description || stateForm.description || ''
+          "
+          (watchValue)="
+            handleOnchange($event, 'description');
+            handleInput($event, 'description', getFieldName('業務内容'))
+          "
+        ></ait-input-text>
+      </div>
+
+      <!-- //prefecture -->
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-autocomplete-master-data
+          [label]="'勤務地（都道府県）'"
+          [required]="true"
+          [isSubmit]="isSubmit"
+          (onError)="handleError($event, 'prefecture')"
+          [id]="'prefecture'"
+          [placeholder]="'選択する'"
+          [class]="'JOB_PREFECTURE'"
+          [maxItem]="10"
+          [width]="'250px'"
+          [defaultValue]="stateJobInfo.prefecture"
+          (watchValue)="handleOnchange($event, 'prefecture', 'master')"
+          [disableOutputDefault]="true"
+          [isReset]="resetMasterInput"
+        >
+        </ait-autocomplete-master-data>
+      </div>
+
+      <!-- //work_location -->
+      <ait-input-text
+        [id]="'work_location'"
+        style="margin-top: 10px; width: 100%"
+        [label]="'勤務地'"
+        [placeholder]="'「勤務地」入力'"
+        [defaultValue]="stateJobInfo.work_location || stateForm.work_location"
+        (watchValue)="handleOnchange($event, 'work_location')"
+        [width]="'400px'"
+        [length]="1000"
+      ></ait-input-text>
+
+      <div
+        class="input__group__inline"
+        style="
+          margin-top: 10px;
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          flex-wrap: wrap;
+        "
+      >
+        <div style="width: 55%">
+          <ait-label [label]="'①勤務時間'" [id]="'shift_1'"></ait-label>
+          <!-- //shift__from_hour &  shift__to_minute -->
+          <div style="display: flex; align-items: center">
+            <ait-timepicker
+              [ishourValue]="true"
+              [defaultValue]="stateJobInfo.shift_1_from_hour"
+              [fieldName]="'shift_1_from_hour'"
+              (watchValue)="handleOnchange($event, 'time')"
+              [placeholder]="'HH'"
+              [id]="'shift_1_from_hour'"
+              [isReset]="resetMasterInput"
+            ></ait-timepicker>
+            <ait-timepicker
+              [placeholder]="'mm'"
+              [fieldName]="'shift_1_from_minute'"
+              [defaultValue]="stateJobInfo.shift_1_from_minute"
+              [isminuteValue]="true"
+              (watchValue)="handleOnchange($event, 'time')"
+              [id]="'shift_1_from_minute'"
+              [isReset]="resetMasterInput"
+            ></ait-timepicker>
+            <span style="color: #8f9bb3; margin: 10px; font-weight: 600"
+              >〜</span
+            >
+            <ait-timepicker
+              [id]="'shift_1_to_hour'"
+              [ishourValue]="true"
+              [fieldName]="'shift_1_to_hour'"
+              [defaultValue]="stateJobInfo.shift_1_to_hour"
+              (watchValue)="handleOnchange($event, 'time')"
+              [placeholder]="'HH'"
+              [isReset]="resetMasterInput"
+            ></ait-timepicker>
+            <ait-timepicker
+              [id]="'shift_1_to_minute'"
+              [isminuteValue]="true"
+              [fieldName]="'shift_1_to_minute'"
+              [defaultValue]="stateJobInfo.shift_1_to_minute"
+              (watchValue)="handleOnchange($event, 'time')"
+              [placeholder]="'mm'"
+              [isReset]="resetMasterInput"
+            ></ait-timepicker>
+          </div>
+          <ait-error-message
+            [errors]="checkTimePicker(1)"
+            [id]="'shift_1'"
+          ></ait-error-message>
+        </div>
+
+        <!-- //holiday -->
+
+        <div style="flex: 1; display: flex; justify-content: flex-start">
+          <ait-input-text
+            [id]="'holiday'"
+            [label]="'休日'"
+            [placeholder]="'「休日」入力'"
+            [defaultValue]="stateJobInfo.holiday || stateForm.holiday"
+            (watchValue)="handleOnchange($event, 'holiday')"
+            [width]="'400px'"
+            [length]="1000"
+          ></ait-input-text>
+        </div>
+      </div>
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-label [label]="'②勤務時間'" [id]="'shift_2'"></ait-label>
+        <!-- //shift__from_hour &  shift__to_minute -->
+        <div style="display: flex; align-items: center">
+          <ait-timepicker
+            [ishourValue]="true"
+            [fieldName]="'shift_2_from_hour'"
+            [defaultValue]="stateJobInfo.shift_2_from_hour"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'HH'"
+            [id]="'shift_2_from_hour'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <ait-timepicker
+            [id]="'shift_2_from_minute'"
+            [placeholder]="'mm'"
+            [isminuteValue]="true"
+            [fieldName]="'shift_2_from_minute'"
+            [defaultValue]="stateJobInfo.shift_2_from_minute"
+            (watchValue)="handleOnchange($event, 'time')"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <span style="color: #8f9bb3; margin: 10px; font-weight: 600">〜</span>
+          <ait-timepicker
+            [id]="'shift_2_to_hour'"
+            [ishourValue]="true"
+            [fieldName]="'shift_2_to_hour'"
+            [defaultValue]="stateJobInfo.shift_2_to_hour"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'HH'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <ait-timepicker
+            [id]="'shift_2_to_minute'"
+            [isminuteValue]="true"
+            [fieldName]="'shift_2_to_minute'"
+            [defaultValue]="stateJobInfo.shift_2_to_minute"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'mm'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+        </div>
+        <ait-error-message
+          [errors]="checkTimePicker(2)"
+          [id]="'shift_2'"
+        ></ait-error-message>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-label [label]="'③勤務時間'" [id]="'shift_3'"></ait-label>
+
+        <!-- //shift__from_hour &  shift__to_minute -->
+        <div style="display: flex; align-items: center">
+          <ait-timepicker
+            [id]="'shift_3_from_hour'"
+            [ishourValue]="true"
+            [fieldName]="'shift_3_from_hour'"
+            [defaultValue]="stateJobInfo.shift_3_from_hour"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'HH'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <ait-timepicker
+            [id]="'shift_3_from_minute'"
+            [placeholder]="'mm'"
+            [isminuteValue]="true"
+            [fieldName]="'shift_3_from_minute'"
+            [defaultValue]="stateJobInfo.shift_3_from_minute"
+            (watchValue)="handleOnchange($event, 'time')"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <span style="color: #8f9bb3; margin: 10px; font-weight: 600">〜</span>
+          <ait-timepicker
+            [id]="'shift_3_to_hour'"
+            [ishourValue]="true"
+            [fieldName]="'shift_3_to_hour'"
+            [defaultValue]="stateJobInfo.shift_3_to_hour"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'HH'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+          <ait-timepicker
+            [id]="'shift_3_to_minute'"
+            [isminuteValue]="true"
+            [fieldName]="'shift_3_to_minute'"
+            [defaultValue]="stateJobInfo.shift_3_to_minute"
+            (watchValue)="handleOnchange($event, 'time')"
+            [placeholder]="'mm'"
+            [isReset]="resetMasterInput"
+          ></ait-timepicker>
+        </div>
+        <ait-error-message
+          [errors]="checkTimePicker(3)"
+          [id]="'shift_2'"
+        ></ait-error-message>
+      </div>
+
+      <!-- <ait-input-inlines
+      [label]="job + '.holiday' | aureoleTranslate"
+      [placeholder]="'「休日」入力'"
+      [value]="stateJobInfo.holiday || stateForm.holiday"
+      (onInput)="handleOnchange($event, 'holiday')"
+      [widthInput]="400"
+      [textColor]="'#000'"
+    ></ait-input-inlines> -->
+
+      <div
+        class="input__group__inline"
+        style="margin-top: 10px; width: 100%; display: flex; flex-wrap: wrap"
+      >
+        <div style="width: 55%; display: flex; justify-content: flex-start">
+          <ait-autocomplete-master-data
+            [id]="'salary_type'"
+            [label]="'給与'"
+            [width]="'170px'"
+            [placeholder]="'選択する'"
+            [required]="true"
+            [class]="'JOB_SALARY_TYPE'"
+            [defaultValue]="[stateJobInfo.salary_type]"
+            [isSubmit]="isSubmit"
+            (onError)="handleError($event, 'salary_type')"
+            (watchValue)="handleOnchange($event, 'salary_type', 'master')"
+            [disableOutputDefault]="true"
+            [isReset]="resetMasterInput"
+            [maxItem]="1"
+          >
+          </ait-autocomplete-master-data>
+        </div>
+        <!-- //salary -->
+        <div
+          class="input__group__inline"
+          style="flex: 1; display: flex; justify-content: flex-start"
+        >
+          <ait-input-number
+            [id]="'salary'"
+            [required]="true"
+            [isSubmit]="isSubmit"
+            [label]="'給与（円）'"
+            [width]="'170px'"
+            [placeholder]="'999,999,999,999'"
+            [defaultValue]="
+              getNumberDefault(stateJobInfo?.salary, stateForm?.salary)
+            "
+            (onError)="handleError($event, 'salary')"
+            (watchValue)="handleOnchange($event, 'salary')"
+            [max]="999999999999"
+            [widthInput]="'170px'"
+            [styleInput]="{ 'text-align': 'right' }"
+            [isReset]="resetMasterInput"
+          ></ait-input-number>
+        </div>
+      </div>
+
+      <div
+        class="input__group__inline"
+        style="margin-top: 10px; display: flex; flex-wrap: wrap; width: 100%"
+      >
+        <ait-input-text
+          [label]="'福利厚生（手当）'"
+          [width]="'400px'"
+          [id]="'benefit'"
+          [placeholder]="'「福利厚生（手当）」入力'"
+          [length]="4000"
+          [rows]="4"
+          [height]="'120px'"
+          style="width: 55%"
+          [defaultValue]="stateJobInfo.benefit || stateForm.benefit || ''"
+          (watchValue)="handleOnchange($event, 'benefit')"
+        >
+        </ait-input-text>
+        <div
+          class="input__group__inline"
+          style="flex: 1; display: flex; justify-content: flex-start"
+        >
+          <!-- //commission_amount -->
+          <ait-input-number
+            [id]="'commission_amount'"
+            [label]="'控除額（円）'"
+            [placeholder]="'999,999,999,999'"
+            [max]="999999999999"
+            [defaultValue]="
+              getNumberDefault(
+                stateJobInfo.commission_amount,
+                stateForm.commission_amount
+              )
+            "
+            [styleInput]="{
+              'text-align': 'right',
+              width: '100%'
+            }"
+            [widthInput]="'170px'"
+            (watchValue)="handleOnchange($event, 'commission_amount')"
+            [isReset]="resetMasterInput"
+          ></ait-input-number>
+        </div>
+      </div>
+
+      <!-- //probationary_period -->
+      <ait-input-text
+        [id]="'probationary_period'"
+        style="margin-top: 10px; width: 100%"
+        [label]="'試用期間'"
+        [placeholder]="'「試用期間」入力' | aureoleTranslate"
+        [defaultValue]="
+          stateJobInfo.probationary_period || stateForm.probationary_period
+        "
+        (watchValue)="handleOnchange($event, 'probationary_period')"
+        [width]="'400px'"
+        [length]="1000"
+      ></ait-input-text>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-number
+          [id]="'age'"
+          [label]="'年齢'"
+          [placeholder]="'100'"
+          [defaultValue]="stateJobInfo.age || stateForm.age"
+          [styleInput]="{ 'text-align': 'right', width: '100%' }"
+          (watchValue)="handleOnchange($event, 'age')"
+          [isReset]="resetMasterInput"
+          [isAge]="true"
+          [widthInput]="'170px'"
+          [max]="100"
+          [min]="1"
+        ></ait-input-number>
+      </div>
+
+      <!-- gender -->
+
+      <!-- {{stateForm | json}} -->
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-label
+          [label]="'性別'"
+          [required]="true"
+          [id]="'gender'"
+        ></ait-label>
+        <div class="radio__input" *ngIf="!isLoading && gender.length !== 0">
+          <nb-radio-group
+            [status]="'basic'"
+            [name]="'control'"
+            style="display: flex"
+          >
+            <nb-radio
+              *ngFor="let option of gender; let isFirst = first"
+              [name]="option._key"
+              [checked]="option.code.includes(stateJobInfo?.gender?._key || stateForm?.gender?.value)"
+              [value]="option"
+              style="color: #fff"
+              (click)="handleChangeRadio(option)"
+              [id]="'gender_radio'"
+            >
+              <span style="color: #8f9bb3" [id]="'gender_radio_text'"
+                >{{ option.label }}
+              </span>
+            </nb-radio>
+          </nb-radio-group>
+        </div>
+        <ait-error-message
+          [errors]="errors.gender"
+          [id]="'gender'"
+        ></ait-error-message>
+      </div>
+
+      <!-- //accommodation -->
+      <div
+        class="input__group__inline"
+        style="margin-top: 30px; display: flex; flex-wrap: wrap; width: 100%"
+      >
+        <div style="width: 55%; display: flex; justify-content: flex-start">
+          <ait-autocomplete-master-data
+            [id]="'accommodation'"
+            [label]="'宿舎の有無'"
+            [placeholder]="'選択する'"
+            [class]="'JOB_ACCOMMODATION_STATUS'"
+            [maxItem]="1"
+            [defaultValue]="[stateJobInfo.accommodation]"
+            (watchValue)="handleOnchange($event, 'accommodation', 'master')"
+            [disableOutputDefault]="true"
+            [isReset]="resetMasterInput"
+            [width]="'250px'"
+          >
+          </ait-autocomplete-master-data>
+        </div>
+
+        <!-- //dormitory -->
+        <div
+          class="input__group__inline"
+          style="flex: 1; display: flex; justify-content: flex-start"
+        >
+          <ait-autocomplete-master-data
+            [id]="'dormitory'"
+            [label]="'宿舎の形態'"
+            [placeholder]="'選択する'"
+            [class]="'JOB_DORMITORY'"
+            [maxItem]="1"
+            [defaultValue]="[stateJobInfo.dormitory]"
+            (watchValue)="handleOnchange($event, 'dormitory', 'master')"
+            [disableOutputDefault]="true"
+            [isReset]="resetMasterInput"
+            [width]="'250px'"
+          >
+          </ait-autocomplete-master-data>
+        </div>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-text
+          [label]="'求める経験'"
+          [id]="'search_evaluation'"
+          [rows]="4"
+          [height]="'120px'"
+          [width]="'400px'"
+          [placeholder]="'「求める経験」入力'"
+          [length]="4000"
+          [defaultValue]="
+            stateJobInfo.search_evaluation || stateForm.search_evaluation || ''
+          "
+          (watchValue)="handleOnchange($event, 'search_evaluation')"
+        ></ait-input-text>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-text
+          [label]="'求めるスキル'"
+          [id]="'skills'"
+          [rows]="4"
+          [height]="'120px'"
+          [length]="4000"
+          [width]="'400px'"
+          [placeholder]="'「求めるスキル」入力'"
+          [defaultValue]="stateJobInfo.skills || stateForm.skills || ''"
+          (watchValue)="handleOnchange($event, 'skills')"
+        ></ait-input-text>
+      </div>
+
+      <!-- //japanese_skill -->
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-autocomplete-master-data
+          [id]="'japanese_skill'"
+          [label]="'語学力（N1-N5）'"
+          [placeholder]="'選択する'"
+          [class]="'JP_CERTIFICATE'"
+          [maxItem]="1"
+          [defaultValue]="[stateJobInfo.japanese_skill]"
+          (watchValue)="handleOnchange($event, 'japanese_skill', 'master')"
+          [disableOutputDefault]="true"
+          [isReset]="resetMasterInput"
+          [width]="'250px'"
+        >
+        </ait-autocomplete-master-data>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-text
+          [label]="'選考方法'"
+          [id]="'method'"
+          [rows]="4"
+          [height]="'120px'"
+          [length]="4000"
+          [width]="'400px'"
+          [placeholder]="'「選考方法」入力'"
+          [defaultValue]="stateJobInfo.method || stateForm.method || ''"
+          (watchValue)="handleOnchange($event, 'method')"
+        ></ait-input-text>
+      </div>
+
+      <div class="input__group__inline" style="margin-top: 10px; width: 100%">
+        <ait-input-text
+          [label]="'求人要件に関する特記事項'"
+          [id]="'remark'"
+          [rows]="4"
+          [height]="'120px'"
+          [length]="4000"
+          [width]="'400px'"
+          [placeholder]="'「選考方法」入力'"
+          [defaultValue]="stateJobInfo.remark || stateForm.remark || ''"
+          (watchValue)="handleOnchange($event, 'remark')"
+        ></ait-input-text>
+      </div>
+
+      <!-- //status -->
+      <div class="input__group__inline" style="margin-top: 10px">
+        <ait-autocomplete-master-data
+          [id]="'status'"
+          [label]="'ステイタス（準備中・募集中・終了）'"
+          [placeholder]="'選択する'"
+          [class]="'JOB_STATUS'"
+          [maxItem]="1"
+          [defaultValue]="[stateJobInfo.status]"
+          (watchValue)="handleOnchange($event, 'status', 'master')"
+          [disableOutputDefault]="true"
+          [isReset]="resetMasterInput"
+          [width]="'250px'"
+        >
+        </ait-autocomplete-master-data>
+      </div>
+      <ait-space></ait-space>
+
+      <ait-space></ait-space>
+    </div>
+  </ait-card-content>
+  <ait-space></ait-space>
+  <ait-space></ait-space>
+  <div
+    class="sticky"
+    style="
+      min-width: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    "
+  >
+    <ait-button
+      *ngIf="mode_screen === 'NEW'"
+      [style]="'active'"
+      [title]="'スキップ'"
+      (click)="skip()"
+      [background]="'transparent'"
+      [nbSpinner]="isLoading"
+      nbSpinnerStatus="primary"
+      [id]="'skip'"
+      [isDefault]="true"
+    ></ait-button>
+    <ait-button
+      [id]="'back'"
+      *ngIf="mode_screen !== 'NEW'"
+      [style]="'active'"
+      [title]="'戻る'"
+      (click)="back()"
+      [nbSpinner]="isLoading"
+      nbSpinnerStatus="primary"
+      [isDefault]="true"
+
+    ></ait-button>
+    <ait-button
+      [id]="'delete'"
+      *ngIf="mode_screen !== 'NEW'"
+      [style]="'active'"
+      [title]="'削除'"
+      (click)="confirmBeforeDelete()"
+      [nbSpinner]="isLoading"
+      nbSpinnerStatus="primary"
+      [isDefault]="true"
+
+    ></ait-button>
+    <ait-button
+      [id]="'reset'"
+      [style]="'active'"
+      [title]="'リセット'"
+      (click)="resetForm()"
+      [nbSpinner]="isLoading"
+      [isDefault]="true"
+      nbSpinnerStatus="primary"
+    ></ait-button>
+    <ait-button
+      [id]="'save'"
+      [style]="compareOriginData() ? 'disabled' : 'active'"
+      [title]="'保存'"
+      (click)="save()"
+      [nbSpinner]="isLoading"
+      nbSpinnerStatus="primary"
+      [isDefault]="true"
+
+    ></ait-button>
+    
+    <ait-button
+    [id]="'test'"
+    [style]="compareOriginData() ? 'disabled' : 'active'"
+    [title]="'text'"
+    (click)="test()"
+    [nbSpinner]="isLoading"
+    nbSpinnerStatus="primary"
+    [isDefault]="true"
+
+  ></ait-button>
+  </div>
+  <!-- <ait-button-group [buttons]="buttons" class="sticky"> </ait-button-group> -->
+</div>

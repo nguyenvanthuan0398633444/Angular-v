@@ -1,0 +1,29 @@
+export const environment = {
+  production: true,
+  isMatching: true,
+  APP: {
+    SECRET_KEY: 'aureole-v',
+    HOST: 'http://127.0.0.1',
+    PORT: 3004,
+    API_PREFIX: '/rest-api/v1',
+    GRAPHQL_PREFIX: '/api/v1',
+    HOST_DOMAIN: 'https://aureole-v.aureole-it.vn',
+  },
+  API_CORE: {
+    HOST: 'http://127.0.0.1:4004',
+    MATCHING_ENGINE_PATH: '/matching-engine',
+    GET: '/api/get',
+    SAVE: '/api/save',
+    REMOVE: '/api/remove',
+    SEARCH: '/api/search',
+    EXCUTE_FUCTION: '/api/execute-function',
+    MATCHING: '/matching',
+    AUREOLE_V: '/sync/aureole-v',
+  },
+  DATABASE: {
+    HOST: 'http://10.0.0.55:8529',
+    NAME: 'matching',
+    USER: 'aureole-v',
+    PASS: 'aureole-v',
+  }
+};

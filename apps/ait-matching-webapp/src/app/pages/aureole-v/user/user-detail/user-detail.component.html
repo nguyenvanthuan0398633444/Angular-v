@@ -1,0 +1,457 @@
+<div class="user__profile__wrapper">
+  <ait-text-gradient
+    [content]="'実習生情報' | aureoleTranslate"
+  ></ait-text-gradient>
+  <div style="margin: 20px"></div>
+  <!-- // Basic info -->
+  <ait-card-content
+    class="content__card"
+    [label]="'基本情報' | aureoleTranslate"
+    (onClickButtonHeader)="handleClickBtnCard(1)"
+    [loading]="loading"
+  >
+    <!-- //name -->
+    <ait-output-text
+      [label]="'実習生名'"
+      style="margin-bottom: 16px; width: 400px"
+      [width]="'200px'"
+      [value]="state.name"
+    ></ait-output-text>
+
+    <!-- //顔写真（URL）, link ảnh -->
+    <div class="input__group__inline" style="margin-bottom: 16px">
+      <ait-output-file
+        [fileKeys]="state.avatar_url"
+        [label]="'顔写真'"
+      ></ait-output-file>
+    </div>
+
+    <!-- //実習生名（カナ）, Trainee name (Kana) -->
+    <ait-output-text
+      [label]="'実習生名（カナ）'"
+      style="margin-bottom: 16px; width: 400px"
+      [width]="'200px'"
+      [value]="state.name_kana"
+    ></ait-output-text>
+
+    <!-- // Gender -->
+    <div style="width: 400px; display: flex; justify-content: flex-start">
+      <ait-output-text
+        [label]="'性別'"
+        style="margin-bottom: 16px"
+        [width]="'200px'"
+        [value]="state.gender?.value"
+      ></ait-output-text>
+    </div>
+
+    <!-- //dob jp -->
+    <div class="row__date">
+      <!-- //dob -->
+      <div class="input__group__inline">
+        <ait-datepicker
+          [label]="'生年月日'"
+          [disable]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+          [defaultValue]="state.dob"
+        ></ait-datepicker>
+      </div>
+      <div class="input__group__inline" style="margin-top: 16px">
+        <ait-output-text
+          [label]="'生年月日（和暦）'"
+          [width]="'200px'"
+          [value]="state.dob_jp"
+        ></ait-output-text>
+      </div>
+    </div>
+
+    <!-- //国籍, country ) -->
+    <ait-output-text
+      [label]="'国籍'"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.country?.value"
+    ></ait-output-text>
+
+    <ait-output-text
+      [label]="'渉外担当'"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.relation_pic"
+    ></ait-output-text>
+
+    <!-- //パスポート番号, passport number ) -->
+    <ait-output-text
+      [label]="'パスポート番号'"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.passport_number"
+    ></ait-output-text>
+
+    <ait-output-text
+      [label]="'通訳担当'"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.translate_pic"
+    ></ait-output-text>
+
+    <!-- //在留資格, status residence ) -->
+
+    <ait-output-text
+      [label]="'在留資格'"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.residence_status?.value"
+    ></ait-output-text>
+    <!-- <ait-output-text
+      [label]="'030' | aureoleTranslate"
+      style="width: 400px; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.emp_type?.value"
+    ></ait-output-text> -->
+  </ait-card-content>
+
+  <div style="margin: 20px"></div>
+  <!-- // Technical intern training information -->
+
+  <ait-card-content
+    class="content__card"
+    [label]="'技能実習情報'"
+    (onClickButtonHeader)="handleClickBtnCard(2)"
+    [loading]="loading"
+  >
+    <!-- //受入企業名, acceptance company -->
+    <ait-output-text
+      [label]="'受入企業名'"
+      style="width: 100%"
+      [width]="'200px'"
+      [value]="state.accepting_company"
+      [guidance]="
+        '受入れ企業名が変更になった場合は「雇用条件書」「パスポート」「在留カード」リンクを張り替えてください'
+      "
+    ></ait-output-text>
+
+    <!-- //現住所, current address -->
+    <ait-output-text
+      [label]="'現住所'"
+      style="width: 100%"
+      [width]="'400px'"
+      [value]="state.address"
+    ></ait-output-text>
+
+    <!-- //職種, occupation -->
+    <ait-output-text
+      [label]="'職種'"
+      style="width: 100%; margin-top: 16px"
+      [width]="'200px'"
+      [value]="state.occupation?.value"
+    ></ait-output-text>
+
+    <!-- //入国日, immigration_date -->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-datepicker
+        [label]="'入国日'"
+        [defaultValue]="state.immigration_date"
+        [style]="{ width: '200px' }"
+        [disable]="true"
+        [styleInput]="{ color: '#8f9bb3', width: '150px' }"
+      ></ait-datepicker>
+    </div>
+
+    <!-- //date -->
+    <div class="row__date">
+      <!-- //employment_start_date -->
+      <div class="input__group__inline date" style="margin-top: 16px">
+        <ait-datepicker
+          [label]="'雇用開始日'"
+          [defaultValue]="state.employment_start_date"
+          [style]="{ width: '200px' }"
+          [disable]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+        ></ait-datepicker>
+      </div>
+
+      <!-- //no2_permit_date -->
+      <div class="input__group__inline date" style="margin-top: 16px">
+        <ait-datepicker
+          [label]="'許可年月日（2号移行(予定)年月日）'"
+          [defaultValue]="state.no2_permit_date"
+          [style]="{ width: '200px' }"
+          [disable]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+        ></ait-datepicker>
+      </div>
+
+      <!-- //stay_period -->
+      <div class="input__group__inline date" style="margin-top: 16px">
+        <ait-datepicker
+          [label]="'在留期限'"
+          [defaultValue]="state.stay_period"
+          [style]="{ width: '200px' }"
+          [disable]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+        ></ait-datepicker>
+      </div>
+    </div>
+
+    <!-- //date -->
+    <div class="row__date">
+      <div class="item__row__date">
+        <!-- //no3_exam_dept_date -->
+        <div class="input__group__inline date" style="margin-top: 16px">
+          <ait-label [label]="'3号試験学科'"></ait-label>
+
+          <ait-datepicker
+            [defaultValue]="state.no3_exam_dept_date"
+            [style]="{ width: '200px' }"
+            [disable]="true"
+            [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+          ></ait-datepicker>
+        </div>
+        <div style="margin: 10px"></div>
+        <!-- //no3_exam_dept_pass -->
+        <ait-output-text
+          [label]="''"
+          style="width: 100%; margin-top: 16px"
+          [width]="'200px'"
+          [value]="state.no3_exam_dept_pass?.value"
+        ></ait-output-text>
+      </div>
+
+      <div class="item__row__date">
+        <!-- //no3_exam_practice_date -->
+        <div class="input__group__inline date" style="margin-top: 16px">
+          <ait-label [label]="'3号試験実技'"></ait-label>
+
+          <ait-datepicker
+            [defaultValue]="state.no3_exam_practice_date"
+            [style]="{ width: '200px' }"
+            [disable]="true"
+            [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+          ></ait-datepicker>
+        </div>
+        <div style="margin: 10px"></div>
+        <!-- //no3_exam_practice_pass -->
+        <ait-output-text
+          [label]="''"
+          style="width: 100%; margin-top: 16px"
+          [width]="'200px'"
+          [value]="state.no3_exam_practice_pass?.value"
+        ></ait-output-text>
+      </div>
+    </div>
+
+    <div style="width: 100%">
+      <div class="input__group__inline" style="margin-top: 16px">
+        <ait-label [label]="'許可年月日（3号移行(予定)年月日）'"></ait-label>
+
+        <ait-datepicker
+          [defaultValue]="state.no3_permit_date"
+          [style]="{ width: '200px' }"
+          [disable]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '150px' }"
+        ></ait-datepicker>
+      </div>
+    </div>
+
+    <!-- //職務経歴（URL）, resum -->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-output-file
+        [label]="'職務経歴'"
+        [fileKeys]="state.resume"
+      ></ait-output-file>
+    </div>
+
+    <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+      <ait-label [label]="'現在の給料（円）'"></ait-label>
+
+      <div>
+        <ait-input-number
+          [defaultValue]="state.current_salary"
+          [placeholder]="'300,000'"
+          [isReadOnly]="true"
+          [isCurrency]="true"
+          [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+        ></ait-input-number>
+        <div class="info">
+          <nb-icon
+            style="color: #8f9bb3; margin-right: 8px; font-size: 24px"
+            icon="info-outline"
+          ></nb-icon>
+          <ait-label
+            [label]="'雇用契約書'"
+            [styleText]="{
+              'word-break': 'break-word',
+              color: '#8f9bb3',
+              'font-size': '12px',
+              'font-weight': '300'
+            }"
+          ></ait-label>
+        </div>
+      </div>
+    </div>
+
+    <!--  //現在の給料（円）, training_remark-->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-label [label]="'実習中の特記事項'"></ait-label>
+      <textarea
+        nbInput
+        disabled
+        style="width: 400px; color: #8f9bb3; min-height: 131px; margin-top: 8px"
+        readonly="{{ true }}"
+        fullWidth
+        [value]="state.training_remark || null"
+        class="textarea"
+      >
+      </textarea>
+    </div>
+
+    <div style="width: 100%">
+      <div class="input__group__inline" style="margin-top: 16px">
+        <ait-output-file
+          [label]="'個人情報の取り扱いについての同意'"
+          [fileKeys]="state?.agreement_file"
+        ></ait-output-file>
+      </div>
+    </div>
+  </ait-card-content>
+
+  <div style="margin: 20px"></div>
+  <!-- // 転職希望情報 Job change request information -->
+  <ait-card-content
+    class="content__card"
+    [label]="'転職希望情報'"
+    (onClickButtonHeader)="handleClickBtnCard(4)"
+    [loading]="loading"
+  >
+    <!-- //職務経歴（URL）, resume -->
+    <ait-output-text
+      [label]="'希望の在留資格'"
+      style="width: 100%; margin-top: 16px"
+      [width]="'400px'"
+      [valueArray]="stateJobSetting.residence_status"
+    ></ait-output-text>
+
+    <div style="width: 100%; display: flex; justify-content: space-between">
+      <ait-output-text
+        [label]="'希望の給料'"
+        style="margin-top: 16px"
+        [width]="'200px'"
+        [value]="stateJobSetting?.salary_type?.value"
+      ></ait-output-text>
+      <div class="input__group__inline" style="margin-top: 16px">
+        <div class="number__group">
+          <ait-input-number
+            [label]="'希望の給料（円）'"
+            [placeholder]="'300,000'"
+            [isReadOnly]="true"
+            [isCurrency]="true"
+            [defaultValue]="stateJobSetting.desired_salary"
+            [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+          ></ait-input-number>
+        </div>
+      </div>
+    </div>
+
+    <!-- //希望の分野, business -->
+    <ait-output-text
+      [label]="'希望の職種（分野）'"
+      style="width: 100%; margin-top: 16px"
+      [width]="'400px'"
+      [valueArray]="stateJobSetting.business"
+    ></ait-output-text>
+
+    <!-- //desired_occupation -->
+    <ait-output-text
+      [label]="'希望の職種'"
+      style="width: 100%; margin-top: 16px"
+      [width]="'400px'"
+      [value]="stateJobSetting?.desired_occupation?.value"
+    ></ait-output-text>
+
+    <!-- //希望の在留資格 -->
+    <ait-output-text
+      [label]="'希望の勤務地'"
+      style="width: 100%; margin-top: 16px"
+      [width]="'400px'"
+      [valueArray]="stateJobSetting.prefecture"
+    ></ait-output-text>
+
+    <!-- //職種, immigration_date -->
+    <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+      <ait-datepicker
+        [label]="'入国日（許可日）'"
+        [style]="{ width: '200px' }"
+        [disable]="true"
+        [styleInput]="{ color: '#8f9bb3', width: '200px' }"
+        [defaultValue]="stateJobSetting.immigration_date"
+      ></ait-datepicker>
+    </div>
+
+    <!-- //語学力（N1-N5, ）, japanese_skill -->
+
+    <!--  //	転職先に関する特記事項, remark-->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-label [label]="'転職先に関する特記事項'"></ait-label>
+
+      <textarea
+        nbInput
+        disabled
+        style="width: 400px; color: #8f9bb3; min-height: 131px; margin-top: 8px"
+        readonly="{{ true }}"
+        fullWidth
+        [value]="stateJobSetting.remark || null"
+        class="textarea"
+      >
+      </textarea>
+    </div>
+  </ait-card-content>
+
+  <ait-card-content
+    class="content__card"
+    [label]="'証明書情報'"
+    (onClickButtonHeader)="handleClickBtnCard(3)"
+    [loading]="loading"
+  >
+    <!-- //特定技能1号証明書 certificate_no1 -->
+    <div style="width: 100%">
+      <div class="input__group__inline" style="margin-top: 16px">
+        <ait-output-file
+          [label]="'特定技能1号証明書'"
+          [fileKeys]="stateCertificate.certificate_no1"
+        ></ait-output-file>
+      </div>
+    </div>
+
+    <!-- //語学力（N1-N5）japanese_skill -->
+    <ait-output-text
+      style="margin-top: 16px"
+      [label]="'語学力（N1-N5）'"
+      [width]="'200px'"
+      [value]="stateCertificate.japanese_skill?.value"
+    ></ait-output-text>
+
+    <!-- //語学資格証明書 japanese_skill_certificate -->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-output-file
+        [label]="'語学資格証明書'"
+        [fileKeys]="stateCertificate.japanese_skill_certificate"
+      ></ait-output-file>
+    </div>
+
+    <!-- //資格の種類(玉掛クレーン等) qualification -->
+    <ait-output-text
+      style="margin-top: 16px"
+      [label]="'資格の種類(玉掛クレーン等)'"
+      [width]="'400px'"
+      [value]="stateCertificate.qualification"
+    ></ait-output-text>
+
+    <!-- //資格の証明書 qualification_certificate -->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-output-file
+        [label]="'資格の証明書'"
+        [fileKeys]="stateCertificate.qualification_certificate"
+      ></ait-output-file>
+    </div>
+  </ait-card-content>
+</div>

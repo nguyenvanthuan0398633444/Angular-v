@@ -1,0 +1,592 @@
+<div class="company__info__wrapper">
+  <ait-text-gradient [content]="'受入企業情報'"></ait-text-gradient>
+
+  <div style="margin: 20px"></div>
+  <!-- // Company info -->
+  <ait-card-content
+    class="content_card"
+    style="display: flex; justify-content: center"
+    [label]="'受入企業情報'"
+    (onClickButtonHeader)="navigateToEditCompany()"
+    [loading]="loading"
+  >
+    <!-- // 社名  name -->
+    <ait-output-text
+      [label]="'社名'"
+      style="margin-bottom: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.name"
+    ></ait-output-text>
+
+    <!-- //住所 address -->
+    <ait-output-text
+      [label]="'住所'"
+      style="margin-bottom: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.address"
+    ></ait-output-text>
+
+    <!-- //分野・業務区分（協議会加入の有無） business -->
+    <ait-output-text
+      [label]="'分野・業務区分（協議会加入の有無）'"
+      style="margin-bottom: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.business"
+    ></ait-output-text>
+
+    <ait-output-text
+      [label]="'職種'"
+      style="margin-bottom: 16px"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.occupation"
+    ></ait-output-text>
+
+    <!-- //作業 work -->
+    <div style="width: 400px; display: flex; justify-content: flex-start">
+      <ait-output-text
+        [label]="'作業'"
+        style="margin-bottom: 16px"
+        [width]="'200px'"
+        [value]="stateCompanyInfo.work"
+      ></ait-output-text>
+    </div>
+
+    <!-- //会社（URL）website -->
+    <div class="input__group__inline" style="width: 100%">
+      <ait-label [label]="'会社（URL）'"></ait-label>
+      <div style="display: flex; flex-direction: column; max-width: 400px">
+        <span
+          *ngFor="let link of getUniqueArray(linkWeb)"
+          style="padding-left: 16px"
+        >
+          <a [href]="link?.url" style="font-size: 12px">{{
+            link?.name || link?.url
+          }}</a>
+        </span>
+        <div
+          *ngIf="getUniqueArray(linkWeb).length === 0"
+          style="
+            border-bottom: 0.5px solid #e4e9f2 !important;
+            height: 0;
+            margin-top: 16px;
+            width: 200px;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <!-- <ait-input-inlines
+      style="width: 100%"
+      [label]="'会社（URL）'"
+      [value]="stateCompanyInfo.website"
+      [isReadOnly]="true"
+      [applyClassName]="'border__bottom__input'"
+      [widthInput]="400"
+    ></ait-input-inlines> -->
+
+    <!-- //電話番号 phone -->
+    <ait-output-text
+      [label]="'電話番号'"
+      style="margin-top: 16px; width: 400px"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.phone"
+    ></ait-output-text>
+
+    <!-- //FAX番号 fax  -->
+
+    <div style="width: 400px; display: flex; justify-content: flex-start">
+      <ait-output-text
+        [label]="'FAX番号'"
+        style="margin-top: 16px; width: 400px"
+        [width]="'200px'"
+        [value]="stateCompanyInfo.fax"
+      ></ait-output-text>
+    </div>
+
+    <!-- //会社人数規模 size -->
+    <ait-output-text
+      [label]="'会社人数規模'"
+      style="margin-top: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.size"
+    ></ait-output-text>
+
+    <!-- //担当者情報（漢字） representative -->
+    <ait-output-text
+      [label]="'担当者情報（漢字）'"
+      style="margin-top: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.representative"
+    ></ait-output-text>
+
+    <!-- //担当者情報（カタカナ） representative_katakana -->
+    <ait-output-text
+      [label]="'担当者情報（カタカナ）'"
+      style="margin-top: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.representative_katakana"
+    ></ait-output-text>
+
+    <!-- //担当者の役職	representative_position -->
+    <ait-output-text
+      [label]="'担当者の役職'"
+      style="margin-top: 16px; width: 100%"
+      [width]="'200px'"
+      [value]="stateCompanyInfo.representative_position"
+    ></ait-output-text>
+
+    <!-- //担当者のメールアドレス representative_email -->
+    <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+      <ait-label [label]="'担当者のメールアドレス'"></ait-label>
+
+      <div style="display: flex; flex-direction: column; max-width: 400px">
+        <span
+          *ngFor="
+            let email of getArrayFromString(
+              stateCompanyInfo.representative_email
+            )
+          "
+          style="padding-left: 16px"
+        >
+          <a [href]="'mailto:' + email" style="font-size: 12px">{{ email }}</a>
+        </span>
+        <div
+          *ngIf="
+            getArrayFromString(stateCompanyInfo.representative_email).length ===
+            0
+          "
+          style="
+            border-bottom: 0.5px solid #e4e9f2 !important;
+            height: 0;
+            margin-top: 16px;
+            width: 200px;
+          "
+        ></div>
+      </div>
+    </div>
+
+    <!-- //外国人労働者の受入状況  acceptance_remark -->
+    <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+      <ait-label [label]="'外国人労働者の受入状況'"></ait-label>
+
+      <textarea
+        nbInput
+        style="width: 400px; color: #8f9bb3; min-height: 131px; margin-top: 8px"
+        readonly
+        fullWidth
+        disabled
+        [value]="stateCompanyInfo.acceptance_remark || ''"
+        class="textarea"
+      >
+      </textarea>
+    </div>
+
+    <!-- 個人情報の取り扱いについての同意 -->
+    <div class="input__group__inline" style="margin-top: 16px">
+      <ait-output-file
+        [label]="'個人情報の取り扱いについての同意'"
+        [fileKeys]="stateCompanyInfo.agreement_file"
+      ></ait-output-file>
+    </div>
+  </ait-card-content>
+  <div style="margin: 20px"></div>
+
+  <!-- //Job -->
+  <ait-card-content
+    class="content_card"
+    style="display: flex; justify-content: center"
+    [label]="'求人要件'"
+    [actionBtn]="actionBtn"
+    (onClickButtonHeader)="navigateToAddJob($event)"
+    [loading]="loading"
+  >
+    <div class="expansion" *ngFor="let state of dataJobInfo; let i = index">
+      <div class="header__expansion" (click)="toggleExpan(i)">
+        <div class="title">
+          <p
+            style="
+              color: #000;
+              max-width: 65%;
+              font-weight: 600;
+              font-size: 14px;
+            "
+          >
+            {{ getStatuJob(state.status?.value) }}：
+            {{ getValueFromArray(state.business) }}
+          </p>
+          <p
+            *ngFor="let text of getSumaryInfo(state?.job_company)"
+            [ngClass]="text?.value ? '' : 'hidden'"
+          >
+            <span *ngIf="text?.value"
+              >{{ statusText(text?.field) }} ： {{ text?.value }}</span
+            >
+          </p>
+        </div>
+        <div class="icon__expan" (click)="toggleExpan(i)">
+          <div
+            [ngClass]="
+              isDev ? 'button_header_card' : 'button_header_card disable'
+            "
+            *ngIf="isDev"
+            (click)="navigateToEditJob(state._key)"
+          >
+            <span style="display: flex">
+              <nb-icon style="color: #fff" [icon]="'edit'"></nb-icon>
+              <span
+                class="text"
+                style="
+                  text-transform: uppercase;
+                  color: #ffffff;
+                  font-size: 10px;
+                  margin-left: 10px;
+                "
+                >{{ 'c_2003' | aureoleTranslate }}</span
+              >
+            </span>
+          </div>
+          <div style="width: 20px; height: 20px; margin-right: 10px" class="icon_btn">
+            <nb-icon
+              (click)="toggleExpan(i)"
+              *ngIf="!state.isOpen"
+              icon="arrow-ios-downward-outline"
+            ></nb-icon>
+            <nb-icon
+              (click)="toggleExpan(i)"
+              *ngIf="state.isOpen"
+              icon="arrow-ios-upward-outline"
+            ></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div style="width: 100%; border-bottom: 1px solid #e4e9f2"></div>
+      <div [ngClass]="'content__expansion' + (!state.isOpen ? ' hidden' : '')">
+        <!-- //職種・分野 business -->
+        <ait-output-text
+          [label]="'職種・分野'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [valueArray]="state.business"
+        ></ait-output-text>
+
+        <!-- only_apply -->
+        <ait-output-text
+          [label]="'希望者のみ'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="state.desired_occupation?.value"
+        ></ait-output-text>
+
+        <!-- only_experienced -->
+        <ait-output-text
+          [label]="'経験者のみ'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="state.experienced_occupation?.value"
+        ></ait-output-text>
+
+        <!-- //就労資格 residence_status -->
+        <ait-output-text
+          [label]="'就労資格'"
+          style="width: 100%; margin-top: 16px"
+          [width]="'400px'"
+          [valueArray]="state.residence_status"
+        ></ait-output-text>
+
+        <!-- //業務内容	description -->
+        <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+          <ait-label [label]="'業務内容'"></ait-label>
+          <textarea
+            nbInput
+            style="
+              width: 400px;
+              color: #8f9bb3;
+              min-height: 131px;
+              margin-top: 8px;
+            "
+            readonly
+            disabled
+            fullWidth
+            [value]="state.description || ''"
+            class="textarea"
+          >
+          </textarea>
+        </div>
+
+        <!-- //勤務地（都道府県）prefecture -->
+        <ait-output-text
+          [label]="'勤務地（都道府県）'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'400px'"
+          [valueArray]="state.prefecture"
+        ></ait-output-text>
+
+        <!-- //勤務地 work_location -->
+        <ait-output-text
+          [label]="'勤務地'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'400px'"
+          [value]="state.work_location"
+        ></ait-output-text>
+
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+          "
+        >
+          <!-- //①勤務時間 -->
+          <ait-output-text
+            [label]="'①勤務時間'"
+            style="width: 400px"
+            [width]="'200px'"
+            [value]="
+              getValueFromTo(
+                state.shift_1_from_hour,
+                state.shift_1_to_hour,
+                state.shift_1_from_minute,
+                state.shift_1_to_minute
+              )
+            "
+          ></ait-output-text>
+
+          <!-- //休日 holiday  -->
+          <ait-output-text
+            [label]="'休日'"
+            style="width: 400px"
+            [width]="'200px'"
+            [value]="state.holiday"
+          ></ait-output-text>
+        </div>
+
+        <!-- //②勤務時間  -->
+        <ait-output-text
+          [label]="'②勤務時間'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="
+            getValueFromTo(
+              state.shift_2_from_hour,
+              state.shift_2_to_hour,
+              state.shift_2_from_minute,
+              state.shift_2_to_minute
+            )
+          "
+        ></ait-output-text>
+
+        <!-- //③勤務時間 -->
+        <ait-output-text
+          [label]="'③勤務時間'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="
+            getValueFromTo(
+              state.shift_3_from_hour,
+              state.shift_3_to_hour,
+              state.shift_3_from_minute,
+              state.shift_3_to_minute
+            )
+          "
+        ></ait-output-text>
+
+        <!-- //給与(総額or手取り) salary_type -->
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+          "
+        >
+          <ait-output-text
+            [label]="'給与'"
+            style="width: 400px"
+            [width]="'200px'"
+            [value]="state.salary_type?.value"
+          ></ait-output-text>
+
+          <!-- //給与（円）salary -->
+          <div class="input__group__inline" style="width: 400px">
+            <div>
+              <ait-input-number
+                [label]="'給与（円）'"
+                [defaultValue]="state.salary"
+                [placeholder]="'300,000'"
+                [isReadOnly]="true"
+                [styleInput]="{ color: '#8f9bb3' }"
+                [isCurrency]="true"
+                [widthInput]="'200px'"
+              ></ait-input-number>
+            </div>
+          </div>
+        </div>
+
+        <!-- // 福利厚生(手当) benefit -->
+        <ait-output-text
+          [label]="'福利厚生(手当)'"
+          style="margin-top: 16px; width: 400px"
+          [width]="'200px'"
+          [value]="state.benefit"
+        ></ait-output-text>
+
+        <!-- //控除額（円） commission_amount -->
+        <div
+          class="input__group__inline"
+          style="width: 400px; margin-top: 16px"
+        >
+          <div>
+            <ait-input-number
+              [label]="'控除額（円）'"
+              [defaultValue]="state.commission_amount"
+              [placeholder]="'50,000'"
+              [isReadOnly]="true"
+              [styleInput]="{ color: '#8f9bb3' }"
+              [isCurrency]="true"
+              [widthInput]="'200px'"
+            ></ait-input-number>
+          </div>
+        </div>
+
+        <!-- 試用期間 -->
+        <ait-output-text
+          [label]="'試用期間'"
+          style="margin-top: 16px"
+          [width]="'200px'"
+          [value]="state.probationary_period"
+        >
+        </ait-output-text>
+
+        <!-- // 年齢 age -->
+        <div class="input__group__inline" style="width: 100%; margin-top: 16px">
+          <div>
+            <ait-input-number
+              [label]="'年齢'"
+              [defaultValue]="state.age"
+              [placeholder]="'35'"
+              [isReadOnly]="true"
+              [styleInput]="{ color: '#8f9bb3' }"
+              [widthInput]="'200px'"
+            ></ait-input-number>
+          </div>
+        </div>
+
+        <!-- //性別 gender -->
+        <ait-output-text
+          [label]="'性別'"
+          style="width: 100%; margin-top: 16px"
+          [width]="'200px'"
+          [value]="state.gender?.value"
+        ></ait-output-text>
+
+        <!-- //宿舎の有無  accommodation -->
+        <ait-output-text
+          [label]="'宿舎の有無'"
+          style="margin-top: 16px; width: 400px"
+          [width]="'200px'"
+          [value]="state.accommodation?.value"
+        ></ait-output-text>
+
+        <!-- //宿舎の形態 dormitory -->
+        <div
+          style="
+            width: 400px;
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 16px;
+          "
+        >
+          <ait-output-text
+            [label]="'宿舎の形態'"
+            style="width: 400px"
+            [width]="'200px'"
+            [value]="state.dormitory?.value"
+          ></ait-output-text>
+        </div>
+
+        <!-- //求める経験  search_evaluation -->
+        <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+          <ait-label [label]="'求める経験'"></ait-label>
+
+          <textarea
+            nbInput
+            style="width: 400px; color: #8f9bb3; min-height: 131px"
+            readonly
+            disabled
+            fullWidth
+            [value]="state.search_evaluation || ''"
+            class="textarea"
+          >
+          </textarea>
+        </div>
+
+        <!-- //求めるスキル skills -->
+        <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+          <ait-label [label]="'求めるスキル'"></ait-label>
+
+          <textarea
+            class="textarea"
+            nbInput
+            disabled
+            style="width: 400px; color: #8f9bb3; min-height: 131px"
+            readonly
+            fullWidth
+            [value]="state.skills || ''"
+          >
+          </textarea>
+        </div>
+
+        <!-- //語学力（N1-N5）japanese_skill -->
+        <ait-output-text
+          [label]="'語学力（N1-N5）'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="state.japanese_skill?.value"
+        ></ait-output-text>
+
+        <!-- //選考方法 method -->
+        <div class="input__group__inline" style="margin-top: 16px; width: 100%">
+          <ait-label [label]="'選考方法'"></ait-label>
+
+          <textarea
+            class="textarea"
+            disabled
+            nbInput
+            style="width: 400px; color: #8f9bb3; min-height: 131px"
+            readonly
+            fullWidth
+            [value]="state.method || ''"
+          >
+          </textarea>
+        </div>
+
+        <!-- //求人要件に関する特記事項 remark -->
+        <div class="input__group__inline" style="margin-top: 16px">
+          <ait-label [label]="'求人要件に関する特記事項'"></ait-label>
+
+          <textarea
+            nbInput
+            disabled
+            class="textarea"
+            style="width: 400px; color: #8f9bb3; min-height: 131px"
+            readonly
+            fullWidth
+            [value]="state.remark || ''"
+          >
+          </textarea>
+        </div>
+
+        <!-- //ステイタス status -->
+        <ait-output-text
+          [label]="'ステイタス'"
+          style="margin-top: 16px; width: 100%"
+          [width]="'200px'"
+          [value]="state.status?.value"
+        ></ait-output-text>
+      </div>
+    </div>
+  </ait-card-content>
+  <ait-toc-menu></ait-toc-menu>
+  <!-- <ait-up-button></ait-up-button> -->
+</div>

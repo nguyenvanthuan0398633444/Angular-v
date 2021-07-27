@@ -1,0 +1,885 @@
+<div class="user__profile__wrapper">
+  <ait-text-gradient
+    [content]="'実習生登録' | aureoleTranslate"
+  ></ait-text-gradient>
+  <ait-space></ait-space>
+
+  <!-- Basic info -->
+  <ait-card-content
+    class="content__card"
+    [label]="'基本情報' | aureoleTranslate"
+    [padding]="'14px 90px 0 10px'"
+    (onToggle)="toggleContent('userInfo', $event)"
+    [isOpen]="isOpen.userInfo"
+    [isStart]="true"
+  >
+    <!-- emp_type-->
+    <div style="margin-top: 14px">
+      <ait-autocomplete-master-data
+        [label]="
+          '実習生区分（オレオウ組合・オレオウ組合に非所属）' | aureoleTranslate
+        "
+        [class]="'EMP_TYPE'"
+        [maxItem]="1"
+        [id]="'emp_type'"
+        [defaultValue]="
+          userInfo.controls['emp_type'].value
+            ? [userInfo.controls['emp_type'].value]
+            : null
+        "
+        [required]="true"
+        (watchValue)="takeMasterValue($event?.value, 'userInfo', 'emp_type')"
+        [style]="{ width: '250px' }"
+        [placeholder]="'選択する' | aureoleTranslate"
+        [disableOutputDefault]="true"
+        [isReset]="resetUserInfo.emp_type"
+        [clearError]="isClearErrors"
+        [errorMessages]="getErrorsMessage('userInfo', 'emp_type')"
+      >
+      </ait-autocomplete-master-data>
+      <!-- name -->
+      <div style="margin-top: 14px; width: 400px">
+        <ait-input-text
+          [label]="'実習生名' | aureoleTranslate"
+          [id]="'name'"
+          [required]="true"
+          [clearError]="isClearErrors"
+          [placeholder]="'「実習生名」入力' | aureoleTranslate"
+          [defaultValue]="userInfo.controls['name'].value"
+          (watchValue)="takeInputValue($event, 'userInfo', 'name')"
+          [fullWidth]="true"
+          [errorMessages]="getErrorsMessage('userInfo', 'name')"
+          [style]="{ width: '400px', height: '140px' }"
+          [length]="400"
+          [isReset]="resetUserInfo.name"
+        >
+        </ait-input-text>
+      </div>
+    </div>
+
+    <!-- avatar_url -->
+    <div style="margin: 14px 0">
+      <ait-input-file
+        [maxFiles]="1"
+        [id]="'avatar_url'"
+        [fileKeys]="userInfo.controls['avatar_url'].value"
+        (watchValue)="takeFiles($event.value, 'userInfo', 'avatar_url')"
+        [guidanceIcon]="'info-outline'"
+        [maxSize]="100"
+        [guidance]="'「顔写真」を添付して下さい。'"
+        [title]="'個人情報の取り扱いについての同意'"
+        [fileTypes]="'jpg,png,jpeg'"
+        [isReset]="isReset"
+        [isSubmit]="isSubmit"
+      >
+      </ait-input-file>
+    </div>
+
+    <!-- name_kana -->
+    <div class="input_area" style="margin-top: 14px">
+      <ait-input-text
+        [label]="'実習生名（カナ）' | aureoleTranslate"
+        [id]="'name_kana'"
+        [required]="true"
+        [clearError]="isClearErrors"
+        [placeholder]="'「実習生名（カナ）」入力' | aureoleTranslate"
+        [defaultValue]="userInfo.controls['name_kana'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'name_kana')"
+        [fullWidth]="true"
+        [errorMessages]="getErrorsMessage('userInfo', 'name_kana')"
+        [length]="400"
+      ></ait-input-text>
+    </div>
+
+    <!-- gender -->
+    <div class="width_400" style="margin-top: 14px">
+      <ait-label
+        class="ait-label"
+        [label]="'性別*' | aureoleTranslate"
+        id="gender"
+      ></ait-label>
+      <nb-radio-group style="padding: 10px 0">
+        <nb-radio
+          *ngFor="let option of genderList; let isFirst = first"
+          [value]="option"
+          [checked]="
+            userInfo.controls['gender'].value
+              ? userInfo.controls['gender'].value?._key == option.code
+              : isFirst
+          "
+          (valueChange)="takeGenderValue($event)"
+        >
+          {{ option.name }}
+        </nb-radio>
+      </nb-radio-group>
+    </div>
+
+    <!-- dob -->
+    <div class="input_area">
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd'"
+        [id]="'dob'"
+        [label]="'生年月日'"
+        [isReset]="resetUserInfo.dob"
+        [dateInput]="userInfo.controls['dob'].value"
+        (watchValue)="takeDatePickerValue($event?.value, 'userInfo', 'dob')"
+        [style]="{ width: '170px' }"
+      >
+      </ait-datepicker>
+    </div>
+
+    <!-- dob_jp -->
+    <div class="input_area">
+      <ait-input-text
+        [label]="'生年月日（和暦）' | aureoleTranslate"
+        [placeholder]="'「生年月日（和暦）」入力' | aureoleTranslate"
+        [id]="'dob_jp'"
+        [defaultValue]="userInfo.controls['dob_jp'].value"
+        [readonly]="true"
+        [fullWidth]="true"
+        [width]="'250px'"
+      >
+      </ait-input-text>
+    </div>
+
+    <!-- country -->
+    <div class="input_area">
+      <ait-autocomplete-master-data
+        [label]="'国籍' | aureoleTranslate"
+        [class]="'COUNTRY'"
+        [maxItem]="1"
+        [id]="'country'"
+        [isReset]="resetUserInfo.country"
+        [defaultValue]="
+          userInfo.controls['country'].value
+            ? [userInfo.controls['country'].value]
+            : null
+        "
+        (watchValue)="takeMasterValue($event?.value, 'userInfo', 'country')"
+        [style]="{ width: '250px' }"
+        [placeholder]="'選択する' | aureoleTranslate"
+        [disableOutputDefault]="true"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- relation_pic -->
+    <div class="input_area">
+      <ait-input-text
+        [label]="'渉外担当者' | aureoleTranslate"
+        [id]="'relation_pic'"
+        [width]="'250px'"
+        [errorMessages]="getErrorsMessage('userInfo', 'relation_pic')"
+        [placeholder]="'「渉外担当者」入力' | aureoleTranslate"
+        [defaultValue]="userInfo.controls['relation_pic'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'relation_pic')"
+        [fullWidth]="true"
+        [length]="400"
+      >
+      </ait-input-text>
+    </div>
+
+    <!-- passport_number -->
+    <div class="input_area">
+      <ait-input-text
+        [label]="'パスポート番号' | aureoleTranslate"
+        [id]="'passport_number'"
+        [width]="'250px'"
+        [errorMessages]="getErrorsMessage('userInfo', 'passport_number')"
+        [placeholder]="'「パスポート番号」入力' | aureoleTranslate"
+        [defaultValue]="userInfo.controls['passport_number'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'passport_number')"
+        [length]="20"
+        [fullWidth]="true"
+      >
+      </ait-input-text>
+    </div>
+
+    <!-- translate_pic -->
+    <div class="input_area">
+      <ait-input-text
+        [label]="'通訳担当' | aureoleTranslate"
+        [id]="'translate_pic'"
+        [width]="'250px'"
+        [errorMessages]="getErrorsMessage('userInfo', 'translate_pic')"
+        [placeholder]="'「通訳担当」入力' | aureoleTranslate"
+        [defaultValue]="userInfo.controls['translate_pic'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'translate_pic')"
+        [fullWidth]="true"
+        [length]="400"
+      >
+      </ait-input-text>
+    </div>
+    <!-- residence_status -->
+    <div class="input_area">
+      <ait-autocomplete-master-data
+        [class]="'RESIDENCE_STATUS'"
+        [label]="'在留資格' | aureoleTranslate"
+        [isReset]="resetUserInfo.residence_status"
+        [defaultValue]="
+          userInfo.controls['residence_status'].value
+            ? [userInfo.controls['residence_status'].value]
+            : null
+        "
+        [required]="true"
+        [clearError]="isClearErrors"
+        [id]="'residence_status_user_info'"
+        [maxItem]="1"
+        [errorMessages]="getErrorsMessage('userInfo', 'residence_status')"
+        (watchValue)="
+          takeMasterValue($event?.value, 'userInfo', 'residence_status')
+        "
+        [placeholder]="'選択する' | aureoleTranslate"
+        [disableOutputDefault]="true"
+        [style]="{ width: '250px' }"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+  </ait-card-content>
+
+  <ait-space></ait-space>
+
+  <!-- Training info -->
+  <ait-card-content
+    class="content__card"
+    [label]="'技能実習情報'"
+    [padding]="'14px 90px 0 10px'"
+    (onToggle)="toggleContent('userTraining', $event)"
+    [isOpen]="isOpen.userTraining"
+  >
+    <!-- accepting_company -->
+    <div class="input_inline">
+      <ait-input-text
+        [label]="'受入企業名' | aureoleTranslate"
+        [placeholder]="'「受入企業名」入力' | aureoleTranslate"
+        [fullWidth]="true"
+        [errorMessages]="getErrorsMessage('userInfo', 'accepting_company')"
+        [defaultValue]="userInfo.controls['accepting_company'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'accepting_company')"
+        [required]="true"
+        [clearError]="isClearErrors"
+        [width]="'400px'"
+        [length]="1000"
+        [guidanceIcon]="'info-outline'"
+        [id]="'accepting_company'"
+        [guidance]="
+          '受入れ企業名が変更になった場合は「雇用条件書」「パスポート」「在留カード」リンクを張り替えてください'
+        "
+      >
+      </ait-input-text>
+    </div>
+
+    <!-- address -->
+    <div class="input_inline">
+      <ait-input-text
+        [label]="'現住所' | aureoleTranslate"
+        [id]="'address'"
+        [placeholder]="'「現住所」入力' | aureoleTranslate"
+        [width]="'400px'"
+        [errorMessages]="getErrorsMessage('userInfo', 'address')"
+        [defaultValue]="userInfo.controls['address'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'address')"
+        [length]="1000"
+      >
+      </ait-input-text>
+    </div>
+
+    <!-- occupation -->
+    <div class="input_inline">
+      <ait-autocomplete-master-data
+        [class]="'JOB_OCCUPATION'"
+        [id]="'occupation'"
+        [isReset]="resetUserInfo.occupation"
+        [defaultValue]="
+          userInfo.controls['occupation'].value
+            ? [userInfo.controls['occupation'].value]
+            : null
+        "
+        [style]="{ width: '250px' }"
+        [maxItem]="1"
+        (watchValue)="takeMasterValue($event?.value, 'userInfo', 'occupation')"
+        [placeholder]="'選択する' | aureoleTranslate"
+        [disableOutputDefault]="true"
+        [label]="'職種'"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- immigration_date -->
+    <div class="input_inline">
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd'"
+        [id]="'immigration_date'"
+        [label]="'入国日'"
+        [dateInput]="userInfo.controls['immigration_date'].value"
+        [style]="{ width: '170px' }"
+        (watchValue)="
+          takeDatePickerValue($event?.value, 'userInfo', 'immigration_date')
+        "
+        [isReset]="resetUserInfo.immigration_date"
+      >
+      </ait-datepicker>
+    </div>
+
+    <!-- employment_start_date -->
+    <ait-datepicker
+      [placeholder]="'yyyy/MM/dd'"
+      [id]="'employment_start_date'"
+      [label]="'雇用開始日'"
+      [dateInput]="userInfo.controls['employment_start_date'].value"
+      (watchValue)="
+        takeDatePickerValue($event?.value, 'userInfo', 'employment_start_date')
+      "
+      [isReset]="resetUserInfo.employment_start_date"
+      [style]="{ width: '170px' }"
+    >
+    </ait-datepicker>
+
+    <!-- no2_permit_date -->
+    <ait-datepicker
+      [placeholder]="'yyyy/MM/dd'"
+      [id]="'no2_permit_date'"
+      [label]="'許可年月日（2号移行(予定)年月日）'"
+      [dateInput]="userInfo.controls['no2_permit_date'].value"
+      (watchValue)="
+        takeDatePickerValue($event?.value, 'userInfo', 'no2_permit_date')
+      "
+      [isReset]="resetUserInfo.no2_permit_date"
+      [style]="{ width: '170px' }"
+    ></ait-datepicker>
+
+    <!-- stay_period -->
+    <ait-datepicker
+      [placeholder]="'yyyy/MM/dd'"
+      [id]="'stay_period'"
+      [label]="'在留期限'"
+      [dateInput]="userInfo.controls['stay_period'].value"
+      (watchValue)="
+        takeDatePickerValue($event?.value, 'userInfo', 'stay_period')
+      "
+      [isReset]="resetUserInfo.stay_period"
+      [style]="{ width: '170px' }"
+    ></ait-datepicker>
+
+    <div class="input_inline"></div>
+
+    <!-- no3_exam_dept_date -->
+    <div style="display: flex">
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd'"
+        [id]="'no3_exam_dept_date'"
+        [label]="'3号試験学科'"
+        [dateInput]="userInfo.controls['no3_exam_dept_date'].value"
+        (watchValue)="
+          takeDatePickerValue($event?.value, 'userInfo', 'no3_exam_dept_date')
+        "
+        [isReset]="resetUserInfo.no3_exam_dept_date"
+        [style]="{ width: '170px' }"
+      >
+      </ait-datepicker>
+
+      <!-- no3_exam_dept_pass -->
+      <ait-autocomplete-master-data
+        [class]="'TRAINING_EXAM_STATUS'"
+        [defaultValue]="
+          userInfo.controls['no3_exam_dept_pass'].value
+            ? [userInfo.controls['no3_exam_dept_pass'].value]
+            : null
+        "
+        [maxItem]="1"
+        [style]="{
+          width: '130px',
+          'margin-top': '24px',
+          'margin-left': '15px'
+        }"
+        [placeholder]="'選択する' | aureoleTranslate"
+        [id]="'no3_exam_dept_pass'"
+        (watchValue)="
+          takeMasterValue($event?.value, 'userInfo', 'no3_exam_dept_pass')
+        "
+        [isReset]="resetUserInfo.no3_exam_dept_pass"
+        [disableOutputDefault]="true"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <div style="display: flex">
+      <!-- no3_exam_practice_date -->
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd'"
+        [id]="'no3_exam_practice_date'"
+        [label]="'3号試験実技'"
+        [dateInput]="userInfo.controls['no3_exam_practice_date'].value"
+        (watchValue)="
+          takeDatePickerValue(
+            $event?.value,
+            'userInfo',
+            'no3_exam_practice_date'
+          )
+        "
+        [isReset]="resetUserInfo.no3_exam_practice_date"
+        [style]="{ width: '170px' }"
+      >
+      </ait-datepicker>
+
+      <!-- no3_exam_practice_pass -->
+      <ait-autocomplete-master-data
+        [class]="'TRAINING_EXAM_STATUS'"
+        [defaultValue]="
+          userInfo.controls['no3_exam_practice_pass'].value
+            ? [userInfo.controls['no3_exam_practice_pass'].value]
+            : null
+        "
+        [maxItem]="1"
+        [style]="{
+          width: '130px',
+          'margin-top': '24px',
+          'margin-left': '15px'
+        }"
+        [placeholder]="'選択する' | aureoleTranslate"
+        [id]="'no3_exam_practice_pass'"
+        (watchValue)="
+          takeMasterValue($event?.value, 'userInfo', 'no3_exam_practice_pass')
+        "
+        [isReset]="resetUserInfo.no3_exam_practice_pass"
+        [disableOutputDefault]="true"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- no3_permit_date -->
+    <div class="input_inline" style="margin-top: 14px">
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd'"
+        [id]="'no3_permit_date'"
+        [label]="'許可年月日（3号移行(予定)年月日）'"
+        [dateInput]="userInfo.controls['no3_permit_date'].value"
+        (watchValue)="
+          takeDatePickerValue($event?.value, 'userInfo', 'no3_permit_date')
+        "
+        [isReset]="resetUserInfo.no3_permit_date"
+        [style]="{ width: '170px' }"
+      ></ait-datepicker>
+    </div>
+
+    <!-- resume -->
+    <div class="input_inline">
+      <ait-input-file
+        [hasStatus]="false"
+        [title]="'職務経歴' | aureoleTranslate"
+        [maxSize]="100"
+        [id]="'resume'"
+        [fileKeys]="userInfo.controls['resume'].value"
+        [guidanceIcon]="'info-outline'"
+        [guidance]="'「職務経歴」を添付して下さい。'"
+        [maxFiles]="10"
+        [isNew]="mode === 'NEW'"
+        [isSubmit]="isSubmit"
+        [isReset]="resetUserInfo.resume"
+        (watchValue)="takeFiles($event.value, 'userInfo', 'resume')"
+      >
+      </ait-input-file>
+    </div>
+
+    <!-- current_salary -->
+    <div class="input_inline">
+      <ait-input-number
+        [defaultValue]="userInfo.controls['current_salary'].value"
+        [placeholder]="'999,999,999,999'"
+        [id]="'current_salary'"
+        [isReset]="resetUserInfo.current_salary"
+        (lostFocus)="takeInputNumberValue($event, 'userInfo', 'current_salary')"
+        [errorMessages]="getErrorsMessage('userInfo', 'current_salary')"
+        [guidanceIcon]="'alert-circle-outline'"
+        [guidance]="'雇用契約書　'"
+        [label]="'現在の給料（円）'"
+      >
+      </ait-input-number>
+    </div>
+
+    <!-- training_remark -->
+    <div class="input_inline">
+      <ait-input-text
+        [label]="'実習中の特記事項' | aureoleTranslate"
+        [id]="'training_remark'"
+        [placeholder]="'「実習中の特記事項」入力' | aureoleTranslate"
+        [fullWidth]="true"
+        [defaultValue]="userInfo.controls['training_remark'].value"
+        (watchValue)="takeInputValue($event, 'userInfo', 'training_remark')"
+        [rows]="5"
+        [errorMessages]="getErrorsMessage('userInfo', 'training_remark')"
+        [length]="4000"
+        [width]="'400px'"
+      >
+      </ait-input-text>
+    </div>
+
+    <div class="input_inline">
+      <div class="check-form" *ngIf="mode === 'NEW'">
+        <nb-checkbox
+          [checked]="userInfo.controls['agreement']?.value"
+          [id]="'agreement'"
+          (checkedChange)="toggleCheckBox($event)"
+        >
+        </nb-checkbox>
+        <p class="pcontent">個人情報の取り扱いについての同意</p>
+      </div>
+      <!-- error-message -->
+      <ait-error-message
+        [id]="'agreement'"
+        *ngIf="userInfo.controls['agreement']?.errors"
+        [errors]="userInfoErros?.agreement"
+      >
+      </ait-error-message>
+    </div>
+
+    <div class="input_inline">
+      <ait-input-file
+        [hasStatus]="false"
+        [title]="'個人情報の取り扱いについての同意' | aureoleTranslate"
+        [maxSize]="100"
+        [id]="'agreement_file'"
+        [fileKeys]="userInfo.controls['agreement_file'].value"
+        [guidanceIcon]="'info-outline'"
+        [maxFiles]="10"
+        [guidance]="'「個人情報の取り扱いについての同意」を添付して下さい。'"
+        [isReset]="isReset"
+        [isNew]="mode === 'NEW'"
+        [isSubmit]="isSubmit"
+        (watchValue)="takeFiles($event.value, 'userInfo', 'agreement_file')"
+      ></ait-input-file>
+    </div>
+  </ait-card-content>
+
+  <ait-space></ait-space>
+
+  <!--Job query -->
+  <ait-card-content
+    class="content__card"
+    [label]="'転職希望情報'"
+    [padding]="'0 90px 0 10px'"
+    (onToggle)="toggleContent('userJobQuery', $event)"
+    [isOpen]="isOpen.userJobQuery"
+    [isStart]="true"
+  >
+    <!-- residence_status -->
+    <div class="input_inline">
+      <ait-autocomplete-master-data
+        [placeholder]="'選択する' | aureoleTranslate"
+        [label]="'希望の在留資格'"
+        [id]="'residence_status_user_job_query'"
+        [guidanceIcon]="'info-outline'"
+        [guidance]="'(特定技能・特定活動就労可・特定活動就労不可)'"
+        [class]="'JOB_RESIDENCE_STATUS'"
+        [icon]="'search-outline'"
+        [defaultValue]="userJobQuery.controls['residence_status'].value"
+        (watchValue)="
+          takeMasterValues($event.value, 'userJobQuery', 'residence_status')
+        "
+        [errorMessages]="getErrorsMessage('userJobQuery', 'residence_status')"
+        [isReset]="resetUserJobQuery.residence_status"
+        [maxItem]="99999999"
+        [required]="true"
+        [clearError]="isClearErrors"
+        [style]="{ width: '250px' }"
+        [disableOutputDefault]="true"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- salary_type -->
+    <div class="input_area">
+      <ait-autocomplete-master-data
+      [class]="'JOB_SALARY_TYPE'"
+      [label]="'希望の給料'"
+      [id]="'salary_type'"
+      [defaultValue]="
+        userJobQuery.controls['salary_type'].value
+          ? [userJobQuery.controls['salary_type'].value]
+          : null
+      "
+      [errorMessages]="getErrorsMessage('userJobQuery', 'salary_type')"
+      [isReset]="resetUserJobQuery.salary_type"
+      [style]="{ width: '170px' }"
+      [maxItem]="1"
+      [required]="true"
+      [clearError]="isClearErrors"
+      (watchValue)="
+        takeMasterValue($event?.value, 'userJobQuery', 'salary_type')
+      "
+      [placeholder]="'選択する' | aureoleTranslate"
+      [disableOutputDefault]="true"
+      >
+    </ait-autocomplete-master-data>
+    </div>
+    
+
+    <!-- desired_salary -->
+    <div style="width: 300px">
+      <ait-input-number
+        [min]="0"
+        [max]="999999999999"
+        [placeholder]="'999,999,999,999'"
+        [widthInput]="'170px'"
+        [required]="true"
+        [id]="'desired_salary'"
+        [clearError]="isClearErrors"
+        [label]="'希望の給料 (円)'"
+        (lostFocus)="
+          takeInputNumberValue($event, 'userJobQuery', 'desired_salary')
+        "
+        [errorMessages]="getErrorsMessage('userJobQuery', 'desired_salary')"
+        [defaultValue]="userJobQuery.controls['desired_salary'].value"
+        [isReset]="resetUserJobQuery.desired_salary"
+      >
+      </ait-input-number>
+    </div>
+
+    <!-- business -->
+    <div class="input_inline">
+      <ait-autocomplete-master-data
+        [placeholder]="'選択する' | aureoleTranslate"
+        [class]="'JOB_BUSINESS'"
+        [label]="'希望の分野'"
+        [maxItem]="99999999"
+        [required]="true"
+        [clearError]="isClearErrors"
+        [defaultValue]="userJobQuery.controls['business'].value"
+        [isReset]="resetUserJobQuery.business"
+        (watchValue)="
+          takeMasterValues($event.value, 'userJobQuery', 'business')
+        "
+        [errorMessages]="getErrorsMessage('userJobQuery', 'business')"
+        [id]="'business'"
+        [disableOutputDefault]="true"
+        [style]="{ width: '250px' }"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- desired_occupation -->
+    <div class="input_inline">
+      <ait-autocomplete-master-data
+        [placeholder]="'選択する' | aureoleTranslate"
+        [class]="'JOB_BUSINESS'"
+        [id]="'desired_occupation'"
+        [label]="'希望の職種'"
+        [defaultValue]="[userJobQuery.controls['desired_occupation'].value]"
+        [isReset]="resetUserJobQuery.desired_occupation"
+        (watchValue)="
+          takeMasterValue($event.value, 'userJobQuery', 'desired_occupation')
+        "
+        [disableOutputDefault]="true"
+        [style]="{ width: '250px' }"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- prefecture -->
+    <div class="input_inline">
+      <ait-autocomplete-master-data
+        [placeholder]="'選択する' | aureoleTranslate"
+        [class]="'PREFECTURE'"
+        [label]="'希望の勤務地'"
+        [maxItem]="99999999"
+        [required]="true"
+        [clearError]="isClearErrors"
+        [defaultValue]="userJobQuery.controls['prefecture'].value"
+        [isReset]="resetUserJobQuery.prefecture"
+        (watchValue)="
+          takeMasterValues($event.value, 'userJobQuery', 'prefecture')
+        "
+        [errorMessages]="getErrorsMessage('userJobQuery', 'prefecture')"
+        [id]="'prefecture'"
+        [disableOutputDefault]="true"
+        [style]="{ width: '250px' }"
+      >
+      </ait-autocomplete-master-data>
+    </div>
+
+    <!-- immigration_date -->
+    <div class="input_inline">
+      <ait-datepicker
+        [placeholder]="'yyyy/MM/dd' | aureoleTranslate"
+        [id]="'immigration_date'"
+        [isReset]="resetUserJobQuery.immigration_date"
+        (watchValue)="
+          takeDatePickerValue($event.value, 'userJobQuery', 'immigration_date')
+        "
+        [dateInput]="userJobQuery.controls['immigration_date'].value"
+        [label]="'入国日 (許可日)'"
+        [style]="{ width: '170px' }"
+      >
+      </ait-datepicker>
+    </div>
+
+    <!-- remark -->
+    <div class="input_inline">
+      <ait-input-text
+        [label]="'転職先に関する特記事項' | aureoleTranslate"
+        [id]="'remark'"
+        [placeholder]="'「転職先に関する特記事項」入力' | aureoleTranslate"
+        [fullWidth]="true"
+        [defaultValue]="userJobQuery.controls['remark'].value"
+        [rows]="5"
+        [errorMessages]="getErrorsMessage('userJobQuery', 'remark')"
+        (watchValue)="takeInputValue($event, 'userJobQuery', 'remark')"
+        [width]="'400px'"
+      ></ait-input-text>
+    </div>
+  </ait-card-content>
+
+  <ait-card-content
+    class="content__card"
+    [label]="'証明書情報'"
+    [padding]="'14px 90px 0 10px'"
+    (onToggle)="toggleContent('userCertificate', $event)"
+    [isOpen]="isOpen.userCertificate"
+    [isStart]="true"
+  >
+    <!-- certificate_no1 -->
+    <div class="input_inline">
+      <ait-input-file
+        [title]="'特定技能1号証明書'"
+        [maxFiles]="10"
+        [maxSize]="100"
+        [hasStatus]="false"
+        [id]="'certificate_no1'"
+        [fileKeys]="userCertificate.controls['certificate_no1'].value"
+        [guidanceIcon]="'info-outline'"
+        [guidance]="
+          '「特定技能1号証明書」を添付して下さい。' | aureoleTranslate
+        "
+        [maxSize]="100"
+        [isReset]="isReset"
+        [isNew]="mode === 'NEW'"
+        [isSubmit]="isSubmit"
+        (watchValue)="
+          takeFiles($event.value, 'userCertificate', 'certificate_no1')
+        "
+      >
+      </ait-input-file>
+    </div>
+
+    <!-- japanese_skill -->
+    <ait-autocomplete-master-data
+      [class]="'JP_CERTIFICATE'"
+      [isReset]="resetUserCertificate.japanese_skill"
+      [defaultValue]="
+        userCertificate.controls['japanese_skill'].value
+          ? [userCertificate.controls['japanese_skill'].value]
+          : null
+      "
+      (watchValue)="
+        takeMasterValue($event?.value, 'userCertificate', 'japanese_skill')
+      "
+      [style]="{ width: '170px' }"
+      [placeholder]="'選択する' | aureoleTranslate"
+      [id]="'japanese_skill'"
+      [disableOutputDefault]="true"
+      [label]="'語学力 (N1-N5)'"
+    >
+    </ait-autocomplete-master-data>
+
+    <!-- japanese_skill_certificate -->
+    <ait-input-file
+      [title]="'語学資格証明書' | aureoleTranslate"
+      [maxFiles]="10"
+      [fileKeys]="userCertificate.controls['japanese_skill_certificate'].value"
+      [guidanceIcon]="'info-outline'"
+      [id]="'japanese_skill_certificate'"
+      [hasStatus]="false"
+      [guidance]="'「語学資格証明書」を添付して下さい。' | aureoleTranslate"
+      [maxSize]="100"
+      [isSubmit]="isSubmit"
+      [isNew]="mode === 'NEW'"
+      [isReset]="isReset"
+      (watchValue)="
+        takeFiles($event.value, 'userCertificate', 'japanese_skill_certificate')
+      "
+    >
+    </ait-input-file>
+
+    <div class="input_inline"></div>
+
+    <!-- qualification -->
+    <ait-input-text
+      [label]="'資格の種類(玉掛クレーン等)' | aureoleTranslate"
+      [width]="'400px'"
+      [placeholder]="'「資格の種類(玉掛クレーン等)」入力' | aureoleTranslate"
+      [fullWidth]="true" [length]="1000"
+      [errorMessages]="getErrorsMessage('userCertificate', 'qualification')"
+      [defaultValue]="userCertificate.controls['qualification'].value"
+      (watchValue)="takeInputValue($event, 'userCertificate', 'qualification')"
+      [id]="'qualification'"
+    ></ait-input-text>
+
+    <!-- qualification_certificate -->
+    <ait-input-file
+      [title]="'資格の証明書' | aureoleTranslate"
+      [maxFiles]="10"
+      [isReset]="isReset"
+      [fileKeys]="userCertificate.controls['qualification_certificate'].value"
+      (watchValue)="
+        takeFiles($event.value, 'userCertificate', 'qualification_certificate')
+      "
+      [guidanceIcon]="'info-outline'"
+      [hasStatus]="false"
+      [isNew]="mode === 'NEW'"
+      [isSubmit]="isSubmit"
+      [id]="'qualification_certificate'"
+      [guidance]="'「資格の証明書」を添付して下さい。' | aureoleTranslate"
+      [maxSize]="100"
+    >
+    </ait-input-file>
+  </ait-card-content>
+  <div class="sticky">
+    <div class="action-row">
+      <div class="block">
+        <ait-button
+          *ngIf="mode === 'EDIT'"
+          [id]="'remove'"
+          [width]="'200px'"
+          [title]="'削除'"
+          [background]="
+            'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'
+          "
+          (click)="remove()"
+        >
+        </ait-button>
+
+        <ait-button
+          [id]="'reset'"
+          [width]="'200px'"
+          [title]="'リセット'"
+          [background]="
+            'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'
+          "
+          (click)="reset()"
+        >
+        </ait-button>
+
+        <ait-button
+          *ngIf="(isChanged && mode === 'EDIT') || mode === 'NEW'"
+          [id]="'save'"
+          [width]="'200px'"
+          [title]="'保存'"
+          [background]="
+            'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'
+          "
+          (click)="submit()"
+        >
+        </ait-button>
+
+        <ait-button
+          *ngIf="!isChanged && mode === 'EDIT'"
+          [id]="'disabled'"
+          [width]="'200px'"
+          [title]="'保存'"
+          [style]="'disabled'"
+        >
+        </ait-button>
+      </div>
+    </div>
+  </div>
+</div>

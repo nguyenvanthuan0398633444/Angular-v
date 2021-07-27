@@ -1,0 +1,22 @@
+<ait-common-layout
+  [excludeHeaderScreens]="excludeScreens"
+  [hasSidebar]="false"
+  [menu_actions]="menu_actions"
+  style="position: relative"
+>
+  <router-outlet></router-outlet>
+</ait-common-layout>
+<div
+  class="loading__app"
+  [nbSpinner]="isLoading"
+  nbSpinnerStatus="primary"
+  *ngIf="isLoading"
+  style="
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 999999999999999;
+  "
+></div>

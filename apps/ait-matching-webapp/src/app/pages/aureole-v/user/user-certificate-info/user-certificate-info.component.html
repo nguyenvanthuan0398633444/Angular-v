@@ -1,0 +1,376 @@
+<div class="row forced__container">
+  <div class="col-md-12">
+    <div class="content">
+      <div class="text">
+        <p>{{ '転職希望情報' | aureoleTranslate }}</p>
+      </div>
+      <div class="form">
+        <form [formGroup]="userCertificate">
+          <div class="form-input">
+            <!-- residence_status -->
+            <ait-autocomplete-master-data
+              [placeholder]="'選択する' | aureoleTranslate"
+              [label]="'希望の在留資格 *'"
+              [id]="'residence_status'"
+              [guidanceIcon]="'info-outline'"
+              [guidance]="'(特定技能・特定活動就労可・特定活動就労不可)'"
+              [class]="'JOB_RESIDENCE_STATUS'"
+              [icon]="'search-outline'"
+              [defaultValue]="
+                userCertificate.controls['residence_status'].value
+              "
+              (watchValue)="takeMasterValues($event.value, 'residence_status')"
+              [maxItem]="99999999"
+              [isReset]="isReset.residence_status"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+
+            <!-- error-message -->
+            <div class="custom-error">
+              <ait-error-message
+                [id]="'residence_status'"
+                *ngIf="userCertificate.controls['residence_status'].errors"
+                [errors]="errors?.residence_status"
+              >
+              </ait-error-message>
+            </div>
+            <!-- salary_type -->
+            <div class="width_170">
+              <ait-autocomplete-master-data
+                [class]="'JOB_SALARY_TYPE'"
+                [label]="'希望の給料 *'"
+                [id]="'salary_type'"
+                [defaultValue]="
+                  userCertificate.controls['salary_type'].value
+                    ? [userCertificate.controls['salary_type'].value]
+                    : null
+                "
+                [maxItem]="1"
+                [isReset]="isReset.salary_type"
+                [placeholder]="'選択する' | aureoleTranslate"
+                (watchValue)="takeMasterValue($event?.value, 'salary_type')"
+                [disableOutputDefault]="true"
+              >
+              </ait-autocomplete-master-data>
+            </div>
+
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'salary_type'"
+              *ngIf="userCertificate.controls['salary_type'].errors"
+              [errors]="errors?.salary_type"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- desired_salary -->
+            <ait-input-number
+              [min]="0"
+              [max]="999999999999"
+              [placeholder]="'999,999,999,999'"
+              [widthInput]="'170px'"
+              [id]="'desired_salary'"
+              [label]="'希望の給料 (円) *'"
+              (lostFocus)="takeSalaryValue($event)"
+              [defaultValue]="userCertificate.controls['desired_salary'].value"
+              [isReset]="isReset.desired_salary"
+            >
+            </ait-input-number>
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'desired_salary'"
+              *ngIf="userCertificate.controls['desired_salary'].errors"
+              [errors]="errors?.desired_salary"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- business -->
+            <ait-autocomplete-master-data
+              [placeholder]="'選択する' | aureoleTranslate"
+              [class]="'JOB_BUSINESS'"
+              [label]="'希望の分野 *'"
+              [maxItem]="99999999"
+              [defaultValue]="userCertificate.controls['business'].value"
+              [id]="'business'"
+              [isReset]="isReset.business"
+              (watchValue)="takeMasterValues($event.value, 'business')"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'business'"
+              *ngIf="userCertificate.controls['business'].errors"
+              [errors]="errors?.business"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- desired_occupation -->
+            <ait-autocomplete-master-data
+              [placeholder]="'選択する' | aureoleTranslate"
+              [class]="'JOB_BUSINESS'"
+              [id]="'desired_occupation'"
+              [label]="'希望の職種'"
+              [defaultValue]="[
+                userCertificate.controls['desired_occupation'].value
+              ]"
+              [isReset]="isReset.desired_occupation"
+              (watchValue)="takeMasterValue($event.value, 'desired_occupation')"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- prefecture -->
+            <ait-autocomplete-master-data
+              [placeholder]="'選択する' | aureoleTranslate"
+              [class]="'PREFECTURE'"
+              [label]="'希望の勤務地 *'"
+              [maxItem]="99999999"
+              [defaultValue]="userCertificate.controls['prefecture'].value"
+              [id]="'prefecture'"
+              [isReset]="isReset.prefecture"
+              (watchValue)="takeMasterValues($event.value, 'prefecture')"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'prefecture'"
+              *ngIf="userCertificate.controls['prefecture'].errors"
+              [errors]="errors?.prefecture"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- immigration_date -->
+            <div style="width: 170px">
+              <ait-datepicker
+                [placeholder]="'yyyy/MM/dd' | aureoleTranslate"
+                [id]="'immigration_date'"
+                [isReset]="isReset.immigration_date"
+                [dateInput]="
+                  userCertificate.controls['immigration_date'].value
+                    ? userCertificate.controls['immigration_date'].value
+                    : null
+                "
+                (watchValue)="
+                  takeDatePickerValue($event.value, 'immigration_date')
+                "
+                [label]="'入国日 (許可日)'"
+              >
+              </ait-datepicker>
+            </div>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- remark -->
+            <ait-input-text
+              [label]="'転職先に関する特記事項' | aureoleTranslate"
+              [id]="'remark'"
+              [placeholder]="
+                '「転職先に関する特記事項」入力' | aureoleTranslate
+              "
+              [fullWidth]="true"
+              [defaultValue]="userCertificate.controls['remark'].value"
+              [rows]="5"
+              (watchValue)="takeInputValue($event, 'remark')"
+            ></ait-input-text>
+
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'remark'"
+              *ngIf="userCertificate.controls['remark'].errors"
+              [errors]="errors?.remark"
+            >
+            </ait-error-message>
+            <div #certificate_no1></div>
+
+            <ait-space [margin]="'10px'"></ait-space>
+            <!-- certificate_no1 -->
+            <ait-input-file
+              [title]="'特定技能1号証明書'"
+              [maxFiles]="10"
+              [maxSize]="100"
+              [hasStatus]="false"
+              (watchValue)="getFiles($event.value, 'certificate_no1')"
+              [id]="'certificate_no1'"
+              [isReset]="isReset.certificate_no1"
+              [fileKeys]="userCertificate.controls['certificate_no1'].value"
+              [guidanceIcon]="'info-outline'"
+              [isNew]="mode === 'NEW'"
+              [guidance]="
+                '「特定技能1号証明書」を添付して下さい。' | aureoleTranslate
+              "
+              [maxSize]="100"
+              [isSubmit]="isSubmit"
+            >
+            </ait-input-file>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- japanese_skill -->
+            <div class="width_170">
+              <ait-autocomplete-master-data
+                [class]="'JP_CERTIFICATE'"
+                [isReset]="isReset.japanese_skill"
+                [defaultValue]="
+                  userCertificate.controls['japanese_skill'].value
+                    ? [userCertificate.controls['japanese_skill'].value]
+                    : null
+                "
+                [placeholder]="'選択する' | aureoleTranslate"
+                [id]="'japanese_skill'"
+                (watchValue)="takeMasterValue($event?.value, 'japanese_skill')"
+                [disableOutputDefault]="true"
+                [label]="'語学力 (N1-N5)'"
+              >
+              </ait-autocomplete-master-data>
+            </div>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- japanese_skill_certificate -->
+            <ait-input-file
+              [title]="'語学資格証明書' | aureoleTranslate"
+              [maxFiles]="10"
+              [isReset]="isReset.japanese_skill_certificate"
+              [fileKeys]="
+                userCertificate.controls['japanese_skill_certificate'].value
+              "
+              [guidanceIcon]="'info-outline'"
+              [isNew]="mode === 'NEW'"
+              (watchValue)="
+                getFiles($event.value, 'japanese_skill_certificate')
+              "
+              [id]="'japanese_skill_certificate'"
+              [hasStatus]="false"
+              [guidance]="
+                '「語学資格証明書」を添付して下さい。' | aureoleTranslate
+              "
+              [maxSize]="100"
+              [isSubmit]="isSubmit"
+            >
+            </ait-input-file>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- qualification -->
+            <ait-input-text
+              [label]="'資格の種類(玉掛クレーン等)' | aureoleTranslate"
+              [placeholder]="
+                '「資格の種類(玉掛クレーン等)」入力' | aureoleTranslate
+              "
+              [fullWidth]="true"
+              [defaultValue]="userCertificate.controls['qualification'].value"
+              [id]="'qualification'"
+              (watchValue)="takeInputValue($event, 'qualification')"
+            ></ait-input-text>
+
+            <!-- error-message -->
+            <ait-error-message
+              [id]="'qualification'"
+              *ngIf="userCertificate.controls['qualification'].errors"
+              [errors]="errors.qualification"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- qualification_certificate -->
+            <ait-input-file
+              [title]="'資格の証明書' | aureoleTranslate"
+              [maxFiles]="10"
+              [isReset]="isReset.qualification_certificate"
+              [fileKeys]="
+                userCertificate.controls['qualification_certificate'].value
+              "
+              [guidanceIcon]="'info-outline'"
+              [hasStatus]="false"
+              (watchValue)="getFiles($event.value, 'qualification_certificate')"
+              [id]="'qualification_certificate'"
+              [isNew]="mode === 'NEW'"
+              [guidance]="
+                '「資格の証明書」を添付して下さい。' | aureoleTranslate
+              "
+              [maxSize]="100"
+              [isSubmit]="isSubmit"
+            >
+            </ait-input-file>
+          </div>
+        </form>
+      </div>
+      <!-- button -->
+      <div class="action-row">
+        <div class="block">
+          <div class="block">
+            <!-- スキップ -->
+            <ait-button
+              [id]="'skip'"
+              *ngIf="mode === 'NEW' || mode === 'VIEW'"
+              [background]="'transparent'"
+              [width]="'200px'"
+              [title]="'スキップ' | aureoleTranslate"
+              [style]="'normal'"
+              (click)="skip()"
+            >
+            </ait-button>
+
+            <!-- 戻る -->
+            <ait-button
+              [id]="'back'"
+              *ngIf="mode === 'EDIT' || mode === 'VIEW'"
+              [title]="'戻る' | aureoleTranslate"
+              [width]="'200px'"
+              [background]="'transparent'"
+              [style]="'normal'"
+              (click)="back()"
+            >
+            </ait-button>
+
+            <!-- リセット -->
+            <ait-button
+              [id]="'reset'"
+              *ngIf="mode === 'EDIT' || mode === 'NEW'"
+              [background]="'transparent'"
+              [title]="'リセット' | aureoleTranslate"
+              [width]="'200px'"
+              [style]="'normal'"
+              (click)="resetForm()"
+            >
+            </ait-button>
+
+            <!-- 保存 -->
+            <ait-button
+              [id]="'save'"
+              *ngIf="(isChanged && mode === 'EDIT') || mode === 'NEW'"
+              [title]="'保存'"
+              [style]="'active'"
+              [width]="'200px'"
+              (click)="submitForm()"
+            >
+            </ait-button>
+
+            <ait-button
+              [id]="'disabled'"
+              *ngIf="!isChanged && mode === 'EDIT'"
+              [title]="'保存'"
+              [style]="'disabled'"
+              [width]="'200px'"
+            >
+            </ait-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

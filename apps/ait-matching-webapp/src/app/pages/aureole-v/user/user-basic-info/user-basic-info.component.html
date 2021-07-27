@@ -1,0 +1,285 @@
+<div class="row forced__container">
+  <div class="col-md-12">
+    <div class="content">
+      <div class="text">
+        <p>{{ pageTitle }}</p>
+      </div>
+      <div class="form">
+        <form [formGroup]="userBasic">
+          <div class="form-input">
+            <!-- name -->
+            <ait-input-text
+              [label]="nameLabel"
+              [id]="'name'"
+              [placeholder]="'「実習生名」入力' | aureoleTranslate"
+              [fullWidth]="true"
+              [defaultValue]="userBasic.controls['name'].value"
+              [length]="400"
+              (watchValue)="takeInputValue($event, 'name')"
+            ></ait-input-text>
+
+            <!-- name error-message -->
+            <ait-error-message
+              [id]="'name'"
+              *ngIf="userBasic.controls['name'].errors"
+              [errors]="errors?.name"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- name_kana -->
+            <ait-input-text
+              [label]="'実習生名 (カナ) *' | aureoleTranslate"
+              [id]="'name_kana'"
+              [placeholder]="'「実習生名（カナ）」入力' | aureoleTranslate"
+              [fullWidth]="true"
+              [defaultValue]="userBasic.controls['name_kana'].value"
+              [length]="400"
+              (watchValue)="takeInputValue($event, 'name_kana')"
+            ></ait-input-text>
+
+            <!-- name_kana error-message -->
+            <ait-error-message
+              [id]="'name_kana'"
+              *ngIf="userBasic.controls['name_kana'].errors"
+              [errors]="errors?.name_kana"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- avatar_url -->
+            <ait-input-file
+              *ngIf="isDataInit"
+              [maxFiles]="1"
+              (watchValue)="getFiles($event.value)"
+              [id]="'avatar_url'"
+              [fileKeys]="userBasic.controls['avatar_url'].value"
+              [guidanceIcon]="'info-outline'"
+              [maxSize]="100"
+              [guidance]="'「顔写真」を添付して下さい。'"
+              [title]="'個人情報の取り扱いについての同意'"
+              [isNew]="mode === 'NEW'"
+              [fileTypes]="'jpg,png,jpeg'"
+              [isSubmit]="isSubmit"
+              [isReset]="isReset.avatar_url"
+            >
+            </ait-input-file>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- gender -->
+            <ait-label
+              class="ait-label"
+              [label]="'性別 *' | aureoleTranslate"
+              id="gender"
+            ></ait-label>
+            <ait-space [margin]="'4px'"></ait-space>
+            <nb-radio-group>
+              <nb-radio
+                *ngFor="let option of genderList; let isFirst = first"
+                [value]="option"
+                [checked]="
+                  userBasic.controls['gender'].value
+                    ? userBasic.controls['gender'].value?._key == option.code
+                    : isFirst
+                "
+                (valueChange)="takeGenderValue($event)"
+              >
+                {{ option.name }}
+              </nb-radio>
+            </nb-radio-group>
+            <!-- gender error-message -->
+            <ait-error-message
+              [id]="'gender'"
+              *ngIf="userBasic.controls['gender'].errors"
+              [errors]="errors?.gender"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- dob -->
+            <div class="width_170">
+              <ait-datepicker
+                [placeholder]="'yyyy/MM/dd'"
+                [id]="'dob'"
+                [isReset]="isReset.dob"
+                [label]="'生年月日'"
+                [dateInput]="
+                  userBasic.controls['dob'].value
+                    ? userBasic.controls['dob'].value
+                    : null
+                "
+                (watchValue)="takeDatePickerValue($event?.value, 'dob')"
+              >
+              </ait-datepicker>
+            </div>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- dob_jp -->
+            <ait-input-text
+              [label]="'生年月日（和暦）' | aureoleTranslate"
+              [placeholder]="'「生年月日（和暦）」入力' | aureoleTranslate"
+              [id]="'dob_jp'"
+              [defaultValue]="userBasic.controls['dob_jp'].value"
+              [readonly]="true"
+              [fullWidth]="true"
+            ></ait-input-text>
+
+            <ait-space [margin]="'10px'"></ait-space>
+            <!-- country -->
+            <ait-autocomplete-master-data
+              [label]="'国籍' | aureoleTranslate"
+              [class]="'COUNTRY'"
+              [maxItem]="1"
+              [id]="'country'"
+              [isReset]="isReset.country"
+              [defaultValue]="
+                userBasic.controls['country'].value
+                  ? [userBasic.controls['country'].value]
+                  : null
+              "
+              [placeholder]="'選択する' | aureoleTranslate"
+              (watchValue)="takeMasterValue($event?.value, 'country')"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- passport_number -->
+            <div class="width_250">
+              <ait-input-text
+                [label]="'パスポート番号' | aureoleTranslate"
+                [id]="'passport_number'"
+                [placeholder]="'「パスポート番号」入力' | aureoleTranslate"
+                [length]="20"
+                [defaultValue]="userBasic.controls['passport_number'].value"
+                (watchValue)="takeInputValue($event, 'passport_number')"
+                [fullWidth]="true"
+              >
+              </ait-input-text>
+            </div>
+            <!-- passport_number error-message -->
+            <ait-error-message
+              [id]="'passport_number'"
+              *ngIf="userBasic.controls['passport_number'].errors"
+              [errors]="errors?.passport_number"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+            <!-- residence_status -->
+            <ait-autocomplete-master-data
+              [class]="'RESIDENCE_STATUS'"
+              [label]="'在留資格 *' | aureoleTranslate"
+              [defaultValue]="
+                userBasic.controls['residence_status'].value
+                  ? [userBasic.controls['residence_status'].value]
+                  : null
+              "
+              [id]="'residence_status'"
+              [maxItem]="1"
+              [placeholder]="'選択する' | aureoleTranslate"
+              [isReset]="isReset.residence_status"
+              (watchValue)="takeMasterValue($event?.value, 'residence_status')"
+              [disableOutputDefault]="true"
+            >
+            </ait-autocomplete-master-data>
+            <!-- residence_status error-message -->
+            <ait-error-message
+              [id]="'residence_status'"
+              *ngIf="userBasic.controls['residence_status'].errors"
+              [errors]="errors?.residence_status"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- relation_pic -->
+            <ait-input-text
+              [label]="'渉外担当' | aureoleTranslate"
+              [id]="'relation_pic'"
+              [placeholder]="'「渉外担当」入力' | aureoleTranslate"
+              [fullWidth]="true"
+              [defaultValue]="userBasic.controls['relation_pic'].value"
+              [length]="400"
+              (watchValue)="takeInputValue($event, 'relation_pic')"
+            ></ait-input-text>
+
+            <!-- relation_pic error-message -->
+            <ait-error-message
+              [id]="'relation_pic'"
+              *ngIf="userBasic.controls['relation_pic'].errors"
+              [errors]="errors?.relation_pic"
+            >
+            </ait-error-message>
+
+            <ait-space [margin]="'10px'"></ait-space>
+
+            <!-- translate_pic -->
+            <ait-input-text
+              [label]="'通訳担当' | aureoleTranslate"
+              [id]="'translate_pic'"
+              [placeholder]="'「通訳担当」入力' | aureoleTranslate"
+              [fullWidth]="true"
+              [defaultValue]="userBasic.controls['translate_pic'].value"
+              [length]="400"
+              (watchValue)="takeInputValue($event, 'translate_pic')"
+            ></ait-input-text>
+
+            <!-- translate_pic error-message -->
+            <ait-error-message
+              [id]="'translate_pic'"
+              *ngIf="userBasic.controls['translate_pic'].errors"
+              [errors]="errors?.translate_pic"
+            >
+            </ait-error-message>
+          </div>
+        </form>
+      </div>
+
+      <!-- button -->
+      <div class="action-row">
+        <div class="block">
+          <!-- 戻る -->
+          <ait-button
+            [id]="'back'"
+            *ngIf="mode === 'EDIT' || mode === 'VIEW'"
+            [title]="'戻る' | aureoleTranslate"
+            [width]="'200px'"
+            [style]="'normal'"
+            [background]="'transparent'"
+            (click)="back()"
+          >
+          </ait-button>
+
+          <!-- リセット -->
+          <ait-button
+            [id]="'reset'"
+            *ngIf="mode === 'EDIT' || mode === 'NEW'"
+            [title]="'リセット' | aureoleTranslate"
+            [style]="'normal'"
+            [width]="'200px'"
+            [background]="'transparent'"
+            (click)="resetForm()"
+          >
+          </ait-button>
+
+          <!-- 次へ -->
+          <ait-button
+            [id]="'next'"
+            [width]="'200px'"
+            [title]="'次へ' | aureoleTranslate"
+            [style]="'active'"
+            (click)="submitForm()"
+          >
+          </ait-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<div class="web__db__container">
+    <div class="form__web__db">
+      <p class="form__title">{{ 'POWER EGG API 設定' | translate }}</p>
+      <div class="input__group">
+        <p class="label">{{ 'API名' | translate }}*</p>
+        <input
+          [formControl]="api_nameCtrl"
+          class="input"
+          type="text"
+          nbInput
+          fullWidth
+          [readonly]="mode_screen === 'SHOW'"
+          placeholder="{{ '例：実習生のデータ情報を取得する' | translate }}"
+          (input)="handleCheckErrorFocus('api_nameCtrl')"
+        />
+        <ait-error-message [errors]="errors.api_name"></ait-error-message>
+      </div>
+  
+      <div class="input__group">
+        <p class="label">{{ 'API (URL)' | translate }}*</p>
+        <input
+          [formControl]="api_urlCtrl"
+          class="input"
+          type="text"
+          nbInput
+          fullWidth
+          [readonly]="mode_screen === 'SHOW'"
+          (input)="handleCheckErrorFocus('api_urlCtrl')"
+          placeholder="{{ '例：https://aureole-v.poweregg.net/pe4j/' | translate }}"
+        />
+        <ait-error-message [errors]="errors.api_url"></ait-error-message>
+      </div>
+  
+      <div class="input__group">
+        <p class="label">{{ 'httpメソッド' | translate }}*</p>
+        <nb-select
+          fullWidth
+          [formControl]="http_methodCtrl"
+          placeholder="GET、POST、PUT…"
+          [disabled]="mode_screen === 'SHOW'"
+          style="color: #000"
+        >
+          <nb-option [value]="'GET'">GET</nb-option>
+          <nb-option [value]="'POST'">POST</nb-option>
+          <nb-option [value]="'PUT'">PUT</nb-option>
+          <nb-option [value]="'PATCH'">PATCH</nb-option>
+          <nb-option [value]="'DELETE'">DELETE</nb-option>
+        </nb-select>
+        <ait-error-message [errors]="errors.http_method"></ait-error-message>
+      </div>
+  
+      <div class="input__group">
+        <p class="label">{{ 'APIキー' | translate }}*</p>
+        <input
+          [formControl]="api_keyCtrl"
+          class="input"
+          type="text"
+          nbInput
+          (input)="handleCheckErrorFocus('api_keyCtrl')"
+          fullWidth
+          [readonly]="mode_screen === 'SHOW'"
+          placeholder="{{ '例：f0aaad8f-2de6-4b69-a6c3-5e0384c51a68' | translate }}"
+        />
+        <ait-error-message [errors]="errors.api_key"></ait-error-message>
+      </div>
+  
+      <div class="input__group">
+        <p class="label">{{ 'パラメータ (JSON)' | translate }}*</p>
+        <textarea
+          [formControl]="paramsCtrl"
+          nbInput
+          fullWidth
+          [placeholder]="paramsPlaceholder"
+          style="height: 130px"
+          [readonly]="mode_screen === 'SHOW'"
+          (input)="handleCheckErrorFocus('paramsCtrl')"
+        ></textarea>
+        <ait-error-message [errors]="errors.params"></ait-error-message>
+      </div>
+  
+      <div class="btn__group">
+        <div>
+          <div
+            class="btn has__border"
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="primary"
+            [class.isDisable]="mode_screen !== 'SHOW'"
+            (click)="enforcementWebDB()"
+          >
+            <p>{{ '実行' | translate }}</p>
+          </div>
+        </div>
+        <div>
+          <div
+            class="btn"
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="primary"
+            (click)="getContentMiddleButton().action()"
+          >
+            <p>{{ getContentMiddleButton().title }}</p>
+          </div>
+        </div>
+        <div>
+          <div
+            class="btn"
+            (click)="actionBtnRight()"
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="control"
+            *ngIf="mode_screen !== 'SHOW'"
+          >
+            <p>{{ getSaveOrEditButton().title }}</p>
+          </div>
+          <br *ngIf="isShowLink" />
+        </div>
+      </div>
+      <span (click)="navigateHistory()" *ngIf="isShowLink" style="color: #fff"
+        >{{ 'データベース取込を起動しました。実行結果は、' | translate }}
+        <span
+          style="
+            text-decoration: underline !important;
+            text-decoration-color: #fff !important;
+  
+            cursor: pointer;
+            margin-top: 20px;
+          "
+          >{{ '「実行履歴の確認」' | translate }}</span
+        >
+        {{ '「タブをクリックし確認してください。」' | translate }}</span
+      >
+    </div>
+  
+    <div class="data__web__db">
+      <div class="table-flow">
+        <ng2-smart-table
+          #table
+          [settings]="settings"
+          [source]="source"
+          (rowSelect)="getValue($event)"
+          (rowHover)="handleHoverRow()"
+        ></ng2-smart-table>
+      </div>
+    </div>
+  </div>
+  

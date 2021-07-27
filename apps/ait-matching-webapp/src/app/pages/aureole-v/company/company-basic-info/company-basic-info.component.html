@@ -1,0 +1,114 @@
+<div class="company__info__wrapper">
+    <ait-text-gradient [content]="'組合員登録' | aureoleTranslate"></ait-text-gradient>
+    <ait-space></ait-space>
+    <div class="content__card">
+        <!-- name -->
+        <div class="input_inline">
+            <ait-input-text [required]="true" [label]="'社名' | aureoleTranslate" [id]="'name'" [placeholder]="'「社名」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" [length]="400" (watchValue)="takeInputValue($event, 'name')" [defaultValue]="companyInfo.controls['name'].value"></ait-input-text>
+        </div>
+        <!-- adress -->
+        <div class="input_inline">
+            <ait-input-text [length]="1000" [label]="'住所（登記上）' | aureoleTranslate" [id]="'address'" [placeholder]="'「住所（登記上）」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'address')" [defaultValue]="companyInfo.controls['address'].value">
+            </ait-input-text>
+        </div>
+        <!-- business -->
+        <div class="input_inline">
+            <ait-autocomplete-master-data [class]="'JOB_BUSINESS'" [label]="'分野・業務区分' | aureoleTranslate" [id]="'business'" [maxItem]="1" [placeholder]="'選択する' | aureoleTranslate" [disableOutputDefault]="true" [style]="{ width: '250px' }" (watchValue)="takeMasterValue($event?.value, 'business')"
+                [isReset]="isReset.business" [defaultValue]="companyInfo.controls['business'].value ? [companyInfo.controls['business'].value] : null">
+            </ait-autocomplete-master-data>
+        </div>
+        <!-- occupation -->
+        <div class="input_inline input_inline_twoInput">
+            <ait-autocomplete-master-data [class]="'JOB_OCCUPATION'" [label]="'職種' | aureoleTranslate" [id]="'occupation'" [maxItem]="1" [placeholder]="'選択する' | aureoleTranslate" [disableOutputDefault]="true" [style]="{ width: '250px' }" (watchValue)="takeMasterValue($event?.value, 'occupation')"
+                [isReset]="isReset.occupation" [defaultValue]="companyInfo.controls['occupation'].value ? [companyInfo.controls['occupation'].value] : null">
+            </ait-autocomplete-master-data>
+            <!-- work -->
+            <div class="occupation_work">
+                <ait-autocomplete-master-data [class]="'JOB_WORK'" [label]="'作業' | aureoleTranslate" [id]="'work '" [maxItem]="1" [placeholder]="'選択する' | aureoleTranslate" [disableOutputDefault]="true" [style]="{ width: '250px'}" (watchValue)="takeMasterValue($event?.value, 'work')"
+                    [isReset]="isReset.work" [defaultValue]="companyInfo.controls['work'].value ? [companyInfo.controls['work'].value] : null">
+                </ait-autocomplete-master-data>
+            </div>
+        </div>
+
+        <!-- website -->
+        <div class="input_inline">
+            <ait-input-text [label]="'会社（URL）' | aureoleTranslate" [id]="'website'" [placeholder]="'「会社（URL）」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'website')" [defaultValue]="companyInfo.controls['website'].value">
+            </ait-input-text>
+        </div>
+        <!-- phone -->
+        <div class="input_inline input_inline_twoInput">
+            <ait-input-text [length]="20" [label]="'電話番号' | aureoleTranslate" [id]="'phone'" [placeholder]="'「電話番号」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'phone')" [defaultValue]="companyInfo.controls['phone'].value">
+            </ait-input-text>
+            <!-- fax -->
+            <div class="phone_fax">
+                <ait-input-text [length]="20" [label]="'FAX番号' | aureoleTranslate" [id]="'fax'" [placeholder]="'「FAX番号」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'fax')" [defaultValue]="companyInfo.controls['fax'].value">
+                </ait-input-text>
+            </div>
+        </div>
+        <!-- size-->
+        <div class="input_inline">
+            <ait-autocomplete-master-data [class]="'COMPANY_SIZE'" [label]="'会社人数規模' | aureoleTranslate" [id]="'size'" [maxItem]="1" [placeholder]="'選択する' | aureoleTranslate" [disableOutputDefault]="true" [style]="{ width: '250px' }" (watchValue)="takeMasterValue($event?.value, 'size')"
+                [isReset]="isReset.size" [defaultValue]="companyInfo.controls['size'].value ? [companyInfo.controls['size'].value] : null">
+            </ait-autocomplete-master-data>
+        </div>
+        <!-- representative-->
+        <div class="input_inline">
+            <ait-input-text [length]="400" [label]="'担当者情報（漢字）' | aureoleTranslate" [id]="'representative'" [placeholder]="'「担当者情報（漢字）」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'representative')" [defaultValue]="companyInfo.controls['representative'].value">
+            </ait-input-text>
+        </div>
+        <!-- representative_katakana -->
+        <div class="input_inline">
+            <ait-input-text [length]="400" [label]="'担当者情報（カタカナ）' | aureoleTranslate" [id]="'representative_katakana'" [placeholder]="'「担当者情報（カタカナ）」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'representative_katakana')"
+                [defaultValue]="companyInfo.controls['representative_katakana'].value">
+            </ait-input-text>
+        </div>
+        <!-- representative_position -->
+        <div class="input_inline">
+            <ait-input-text [length]="400" [label]="'担当者の役職' | aureoleTranslate" [id]="'representative_position'" [placeholder]="'「担当者の役職」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'representative_position')"
+                [defaultValue]="companyInfo.controls['representative_position'].value">
+            </ait-input-text>
+        </div>
+        <!-- representative_email-->
+        <div class="input_inline">
+            <ait-input-text [length]="100" [label]="'担当者のメールアドレス' | aureoleTranslate" [id]="'representative_email'" [placeholder]="'「担当者のメールアドレス」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'representative_email')"
+                [defaultValue]="companyInfo.controls['representative_email'].value">
+            </ait-input-text>
+        </div>
+        <!-- acceptance_remark-->
+        <div class="input_inline">
+            <ait-input-text [length]="4000" [label]="'外国人労働者の受入状況' | aureoleTranslate" [id]="'acceptance_remark'" [placeholder]="'「外国人労働者の受入状況」入力' | aureoleTranslate" [fullWidth]="true" [width]="'400px'" (watchValue)="takeInputValue($event, 'acceptance_remark')"
+                [defaultValue]="companyInfo.controls['acceptance_remark'].value">
+            </ait-input-text>
+        </div>
+        <!-- agreement -->
+        <div class="check-form" *ngIf="mode === 'NEW'">
+            <nb-checkbox status="primary" [id]="'agreement'" [checked]="companyInfo.controls['agreement'].value" (checkedChange)="toggle($event)">
+            </nb-checkbox>
+            <p class="pcontent">{{ "個人情報の取り扱いについての同意" | aureoleTranslate }}</p>
+        </div>
+        <!-- agreement_file-->
+        <div class="input_inline">
+            <ait-input-file (watchValue)="getFiles($event.value)" [maxFiles]="10" [hasStatus]="false" [title]="'職務経歴' | aureoleTranslate" [maxSize]="100" [id]="'agreement_file'" [guidanceIcon]="'info-outline'" [guidance]="'「個人情報の取り扱いについての同意」を添付して下さい。'" [fileKeys]="companyInfo.controls['agreement_file'].value"
+                [isReset]="isReset">
+            </ait-input-file>
+        </div>
+
+    </div>
+    <div class="action-row">
+        <div class="block">
+            <ait-button *ngIf="mode === 'EDIT' || mode === 'VIEW'" [id]="'back'" [width]="'200px'" [title]="'戻る'" [background]="
+          'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'">
+            </ait-button>
+            <ait-button *ngIf="mode === 'EDIT'" [id]="'remove'" [width]="'200px'" [title]="'削除'" [background]="
+          'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'">
+            </ait-button>
+            <ait-button [id]="'reset'" [width]="'200px'" [title]="'リセット'" [background]="
+          'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'" (click)="resetForm()"></ait-button>
+            <ait-button [id]="'save'" [width]="'200px'" [title]="'保存'" [background]="
+          'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'" *ngIf="mode === 'EDIT'" [style]="'disabled'">
+            </ait-button>
+            <ait-button [id]="'save'" [width]="'200px'" [background]="
+            'linear-gradient(89.75deg, #002b6e 0.23%, #2288cc 99.81%)'" [title]="'保存'" (click)="submitForm()"> </ait-button>
+        </div>
+    </div>
+</div>
